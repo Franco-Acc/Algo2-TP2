@@ -1,0 +1,9 @@
+G;Gimnasio de Ciudad Plateada;10;1
+L;Broke
+P;Geodude;Tierra;20;132;132;
+P;Onix;Tierra;40;85;232;
+E;Entrenadora Vicky
+P;Omastar;Tierra;30;207;227
+E;Minero José
+P;Rhyhorn;Tierra;50;140;127
+P;Kabutops;Tierra;50;203;120
