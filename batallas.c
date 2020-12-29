@@ -1,9 +1,11 @@
 
+#include <string.h>
+#include "batallas.h"
+
 #define AGUA "Agua"
 #define TIERRA "Tierra"
 #define FUEGO "Fuego"
 #define Aire "Aire"
-
 
 typedef struct pokemon{
 	char nombre[MAX_NOMBRE];
