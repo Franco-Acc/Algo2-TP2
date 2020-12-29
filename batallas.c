@@ -7,15 +7,6 @@
 #define FUEGO "Fuego"
 #define Aire "Aire"
 
-typedef struct pokemon{
-	char nombre[MAX_NOMBRE];
-	char tipo[MAX_tipo];
-	int velocidad;
-	int defensa;
-	int ataque;
-}pokemon_t;
-
-typedef int (* funcion_batalla)(void*, void *);
 
 //Pre: Ambos pokemones deben ser validos (Se supine que la validacion ya fue hecha llegados a este punto)
 //Post: El primer pokemon solo gana cuando es es del tipo ventajoso respcto a su oponente, en casa de ser

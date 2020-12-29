@@ -4,6 +4,16 @@
 #define GANO_PRIMERO 1
 #define GANO_SEGUNDO -1
 
+typedef struct pokemon{
+	char nombre[MAX_NOMBRE];
+	char tipo[MAX_tipo];
+	int velocidad;
+	int defensa;
+	int ataque;
+}pokemon_t;
+
+typedef int (*funcion_batalla)(void*, void *);
+
 /*
  * Se deberan implementar las 5 funciones de batalla.
  * Las reglas para decidir al ganador las inventan ustedes
