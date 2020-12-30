@@ -4,12 +4,15 @@
 #define GANO_PRIMERO 1
 #define GANO_SEGUNDO -1
 
+#define MAX_NOMBRE_PKM 50
+#define MAX_TIPO 20
+
 typedef struct pokemon{
-	char nombre[MAX_NOMBRE];
-	char tipo[MAX_tipo];
-	int velocidad;
-	int defensa;
-	int ataque;
+	char nombre[MAX_NOMBRE_PKM];
+	char tipo[MAX_TIPO];
+	size_t velocidad;
+	size_t defensa;
+	size_t ataque;
 }pokemon_t;
 
 typedef int (*funcion_batalla)(void*, void *);
