@@ -24,6 +24,10 @@
 #define FORMATO_LECTURA_POKEMON "%[^;];%[^;];%u;%u;%u\n"
 #define CANT_ITEMS_POKEMON 5
 
+#define FORMATO_LECTURA_PERSONAJE "%[^\n]\n"
+#define CANT_ITEMS_PERSONAJE 1
+
+
 
 typedef struct gimnasio{
 	char nombre[MAX_NOMBRE];
@@ -36,6 +40,15 @@ typedef struct entrenador{
 	char nombre[MAX_NOMBRE];
 	lista_t* equipo;
 } entrenador_t;
+
+
+typedef struct personaje{
+	char nombre[MAX_NOMBRE];
+	char ciudad_natal[MAX_NOMBRE];
+	size_t medallas_ganadas;
+	lista_t* equipo;
+	lista_t* capturados;
+} personaje_t;
 
 
 int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2){
@@ -245,6 +258,122 @@ int cargar_gimnasio(heap_t* heap, char* direccion_gimasio){
 }
 
 
+bool leer_linea_personaje(FILE* archivo_personaje, personaje_t* personaje, int cant_items_esperados){
+	char nombre_personaje[MAX_NOMBRE];
+	int leidos = fscanf(archivo_personaje, FORMATO_LECTURA_ENTRENADOR, nombre_personaje);
+	if(leidos != cant_items_esperados)
+		return false;
+	strcpy(personaje->nombre, nombre_personaje);
+	return true;
+}
+
+
+bool agregar_nuevo_pokemon_personaje(personaje_t* personaje, pokemon_t* pokemon){
+	if(!personaje){
+		free(pokemon);
+		return false;
+	}
+
+	if(!personaje->equipo)
+		personaje->equipo = lista_crear();
+
+	if(!personaje->equipo){
+		free(pokemon);
+		return false;
+	}
+
+
+	if(!personaje->capturados)
+		personaje->capturados = lista_crear();
+
+	if(!personaje->capturados){
+		free(pokemon);
+		lista_destruir(personaje->equipo);
+		return false;
+	}
+
+	if(lista_elementos(personaje->equipo)<MAX_EQUIPO){
+		if(lista_encolar(personaje->equipo, pokemon)==ERROR){
+			free(pokemon);
+			return false;
+		}
+	}else{
+		if(lista_encolar(personaje->capturados, pokemon)==ERROR){
+			free(pokemon);
+			return false;
+		}
+	}
+	return true;
+}
+
+
+bool leer_linea_pokemon_personaje(FILE* archivo_personaje, personaje_t* personaje, int cant_items_esperados){
+	pokemon_t* nuevo_pkm = calloc(1, sizeof(pokemon_t));
+	int leidos = fscanf(archivo_personaje, FORMATO_LECTURA_POKEMON, nuevo_pkm->nombre, nuevo_pkm->tipo, &(nuevo_pkm->velocidad), &(nuevo_pkm->ataque), &(nuevo_pkm->defensa));
+	if(leidos != cant_items_esperados){
+		free(nuevo_pkm);
+		return false;
+	}
+	return agregar_nuevo_pokemon_personaje(personaje, nuevo_pkm);
+}
+
+
+personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
+
+	personaje_t* personaje = calloc(1, sizeof(personaje_t));
+	if(!personaje)
+		return NULL;
+
+	bool todo_ok = true;
+
+
+	char tipo_linea = leer_primera_letra_de_linea(archivo_personaje);
+	todo_ok = leer_linea_personaje(archivo_personaje, personaje, CANT_ITEMS_PERSONAJE);  //la primera linea siempre debe ser la del gimnasio
+	
+	while(todo_ok){
+		tipo_linea = leer_primera_letra_de_linea(archivo_personaje);
+
+		if(tipo_linea == POKEMON){
+			todo_ok = leer_linea_pokemon_personaje(archivo_personaje, personaje, CANT_ITEMS_POKEMON);
+		}else{
+			todo_ok = false;
+		}
+	}
+	return personaje;
+}
+
+
+
+personaje_t* cargar_personaje(char* direccion_personaje){
+	if(!direccion_personaje)
+		return NULL;
+
+	FILE* archivo_personaje = fopen(direccion_personaje, "r");
+	if(!archivo_personaje){
+		printf("Error al abrir el archivo de personaje seleccionado\n");
+		return NULL;
+	}
+
+	personaje_t* personaje = leer_archivo_personaje(archivo_personaje);
+
+	fclose(archivo_personaje);
+	return personaje;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void imprimir_pokemon(pokemon_t* pokemon){
 	printf("\t%s\n", pokemon->nombre);
@@ -317,6 +446,8 @@ int main(){
 		return ERROR;
 	if(cargar_gimnasio(gimnasios, "Gimnasios/Kanto/Brock.txt")==ERROR)
 		return ERROR;
+
+	personaje_t* personaje = cargar_personaje("Personajes/Kanto/Ash.txt");
 
 	mostrar_gimnasios(gimnasios);
 	return 0;
