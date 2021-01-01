@@ -22,7 +22,7 @@
 #define CANT_ITEMS_ENTRENADOR 1
 
 #define FORMATO_LECTURA_POKEMON "%[^;];%[^;];%u;%u;%u\n"
-#define CANT_ITEMS_POKEMON 4
+#define CANT_ITEMS_POKEMON 5
 
 
 typedef struct gimnasio{
@@ -174,7 +174,7 @@ gimnasio_t* leer_archivo(FILE* archivo_gimnasio){
 
 	gimnasio_t* un_gimnasio = calloc(1, sizeof(gimnasio_t));
 	if(!un_gimnasio)
-		return NULL	;
+		return NULL;
 
 	bool todo_ok = true;
 
@@ -184,12 +184,14 @@ gimnasio_t* leer_archivo(FILE* archivo_gimnasio){
 	
 	while(todo_ok){
 		tipo_linea = leer_primera_letra_de_linea(archivo_gimnasio);
-		if(tipo_linea == ENTRENADOR || tipo_linea == LIDER)
+
+		if(tipo_linea == ENTRENADOR || tipo_linea == LIDER){
 			todo_ok = leer_linea_entrenador(archivo_gimnasio, un_gimnasio, CANT_ITEMS_ENTRENADOR);
-		if(tipo_linea == POKEMON)
+		}else if(tipo_linea == POKEMON){
 			todo_ok = leer_linea_pokemon(archivo_gimnasio, un_gimnasio, CANT_ITEMS_POKEMON);
-		else
+		}else{
 			todo_ok = false;
+		}
 	}
 	return un_gimnasio;
 }
@@ -275,6 +277,7 @@ void imprimir_entrenadores(lista_t* entrenadores){
 	lista_iterador_t* iterador_entrenadores = lista_iterador_crear(entrenadores);
 	while(lista_iterador_tiene_siguiente(iterador_entrenadores)){
 		entrenador_t* entrenador_actual = lista_iterador_elemento_actual(iterador_entrenadores);
+		printf("\n");
 		imprimir_entrenador(entrenador_actual);
 		lista_iterador_avanzar(iterador_entrenadores);
 	}
@@ -289,13 +292,18 @@ void imprimir_gimnasio(gimnasio_t* gimnasio){
 }
 
 
-void mostrar_gimnasio(heap_t* gimnasios){
-	gimnasio_t* gimnasio = heap_extraer_minimal(gimnasios);
-	if(!gimnasio){
-		printf(" Ya no hay más gimnasios para mostrar\n");
+void mostrar_gimnasios(heap_t* gimnasios){
+	if(!gimnasios)
 		return;
+
+	gimnasio_t* gimnasio = heap_extraer_minimal(gimnasios);
+
+	while(gimnasio){
+		imprimir_gimnasio(gimnasio);
+		printf("\n\n\n");
+		gimnasio = heap_extraer_minimal(gimnasios);
 	}
-	imprimir_gimnasio(gimnasio);
+	printf(" Ya no hay más gimnasios para mostrar\n");
 }
 
 
@@ -307,7 +315,10 @@ int main(){
 
 	if(cargar_gimnasio(gimnasios, "Gimnasios/Kanto/Misty.txt")==ERROR)
 		return ERROR;
-	mostrar_gimnasio(gimnasios);
+	if(cargar_gimnasio(gimnasios, "Gimnasios/Kanto/Brock.txt")==ERROR)
+		return ERROR;
+
+	mostrar_gimnasios(gimnasios);
 	return 0;
 }
 

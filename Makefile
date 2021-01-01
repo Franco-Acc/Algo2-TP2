@@ -7,5 +7,5 @@ compile: *.c
 check: aventura
 	valgrind --leak-check=full --track-origins=yes --show-reachable=yes ./aventura
 
-debugg: aventura
-	gdb -tui $(evento_pesca)
+debugg: aventura  
+	gdb -tui aventura
