@@ -13,6 +13,9 @@
 #define ENTRENADOR 'E'
 #define POKEMON 'P'
 
+#define VICTORIA 1
+#define DERROTA -1
+
 #define FORMATO_LECTURA_PRIMERA_LETRA "%c;"
 
 #define FORMATO_LECTURA_GIMNASIO "%[^;];%u;%u\n"
@@ -231,30 +234,32 @@ void liberar_gimnasio(gimnasio_t* gimnasio){
 	free(gimnasio);
 }
 
-int cargar_gimnasio(heap_t* heap, char* direccion_gimasio){
+void cargar_gimnasio(heap_t* heap, char* direccion_gimasio){
 	if(!heap ||!direccion_gimasio)
-		return ERROR;
+		return;
 
 	FILE* archivo_gimnasio = fopen(direccion_gimasio, "r");
 	if(!archivo_gimnasio){
 		printf("Error al abrir el archivo de gimnasio seleccionado\n");
-		return ERROR;
+		return;
 	}
 
 	gimnasio_t* nuevo_gimnasio = leer_archivo(archivo_gimnasio);
 
 	if(!nuevo_gimnasio){
+		printf("Error al reservar memoria para el gimnasio\n");
 		fclose(archivo_gimnasio);
-		return ERROR;
+		return;
 	}
 
-	if(heap_insertar(heap, nuevo_gimnasio)==ERROR){
+	if(heap_insertar(heap, nuevo_gimnasio)=){
 		liberar_gimnasio(nuevo_gimnasio);
 		fclose(archivo_gimnasio);
-		return ERROR;
+		printf("Error al insertar el gimnasio en el HEAP\n");
+		return;
 	}
 	fclose(archivo_gimnasio);
-	return OK;
+	return;
 }
 
 
@@ -436,18 +441,141 @@ void mostrar_gimnasios(heap_t* gimnasios){
 }
 
 
+void trasladar_primer_pokemon(lista_t* lista_original, lista_t* lista_nueva){
+	lista_encolar(lista_nueva, lista_primero(lista_original));
+	lista_desencolar(lista_original);
+}
 
-int main(){
+
+void restaurar_equipos(lista_t* lista_aux, lista_t* equipo){
+	while(!lista_vacia(lista_aux))
+		trasladar_primer_pokemon(lista_aux, equipo);
+}
+
+
+
+int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_batalla reglas_de_batalla){
+	if(!equipo_jugador || !equipo_entrenador || !reglas_de_batalla)
+		return ERROR;
+
+	lista_t* lista_aux_jugador = lista_crear();
+	lista_t* lista_aux_entrenador = lista_crear();
+	int resultado = 0;
+
+	while(!lista_vacia(equipo_jugador) && !lista_vacia(equipo_entrenador)){
+		if(reglas_de_batalla(lista_primero(equipo_jugador), lista_primero(equipo_entrenador))==GANO_PRIMERO)
+			trasladar_primer_pokemon(equipo_entrenador, lista_aux_entrenador);
+		else
+			trasladar_primer_pokemon(equipo_jugador, lista_aux_jugador);
+	}
+
+	if(lista_vacia(equipo_entrenador))
+		resultado = VICTORIA;
+	else
+		resultado = DERROTA;
+
+	restaurar_equipos(lista_aux_jugador, equipo_jugador);
+	restaurar_equipos(lista_aux_entrenador, equipo_entrenador);
+	lista_destruir(lista_aux_jugador);
+	lista_destruir(lista_aux_entrenador);
+	return resultado;
+}
+
+
+void trasladar_ultimo_entrenador(lista_t* pila_original, lista_t* pila_nueva){
+	lista_apilar(pila_nueva, lista_tope(pila_original));
+	lista_desapilar(pila_original);
+}
+
+
+void restaurar_gimnasio(lista_t* pila_aux, lista_t* entrenadores){
+	while(!lista_vacia(pila_aux))
+		trasladar_ultimo_entrenador(pila_aux, entrenadores);
+}
+
+
+int enfrentar_gimnasio(personaje_t* jugador, gimnasio_ẗ* gimnasio){
+	if(!jugador || !gimnasio)
+		return ERROR;
+
+	lista_t* pila_aux_entrenadores = lista_crear();
+	bool fue_derrotado = false;
+
+	while(!lista_vacia(gimnasio->entrenadores) && !fue_derrotado){
+		if(duelo_pokemon(jugador->equipo, lista_tope(gimnasio->entrenadores)->equipo)==VICTORIA)
+			trasladar_ultimo_entrenador(gimnasio->entrenadores, pila_aux_entrenadores);
+		else
+			fue_derrotado = true;
+	}
+
+	restaurar_gimnasio(pila_aux_entrenadores, gimnasio->entrenadores);
+	
+	if(fue_derrotado)
+		return DERROTA;s
+	return VICTORIA;
+}
+
+
+void pedir_direccion(char direccion[MAX_DIRECCION]){
+	printf("Ingrese la direccion del archivo: ");
+	scanf("%[^\n]", direccion);
+}
+
+
+bool quiere_seguir_cargando(){
+	char respuesta;
+	printf("Quiere cargar otro gimnasio??\n Y/N : ");
+	scanf(" %c", &respuesta);
+	if(respuesta==SI)
+		return true;
+	if(respuesta==NO)
+		return false;
+	printf("Recurde solo ingresar uno de los carcateres indicados, en mayuscula\n");
+	return quiere_seguir_cargando();
+}
+
+
+void cargar_gimnasios(heap_t* gimnasios){
+	
+	char direccion_gimasio[MAX_DIRECCION];
+
+	printf("Para ingreasar ingresar un gimnasio indique la direccion del archivo, por ejemplo Gimnasios/Kanto/Misty.txt\n");
+	printf("En caso de ocurrir algun error, este se indicará y no se cargará en gimnasio\n");
+	pedir_direccion(direccion_gimasio);
+	cargar_gimnasio(gimnasios, direccion_gimasio);
+
+	while(quiere_seguir_cargando()){
+		pedir_direccion(direccion_gimasio);
+		cargar_gimnasio(gimnasios, direccion_gimasio);
+	}
+	return;
+}
+
+
+
+int cargar_estructuras(personaje_t* jugador, heap_t* gimnasios){
+	
 	heap_t* gimnasios = heap_crear(comparador_gimnasios, destructor_gimnasios);
 	if(!gimnasios)
-		return ERROR;
+		return ERROR_FATAL;
 
-	if(cargar_gimnasio(gimnasios, "Gimnasios/Kanto/Misty.txt")==ERROR)
-		return ERROR;
-	if(cargar_gimnasio(gimnasios, "Gimnasios/Kanto/Brock.txt")==ERROR)
-		return ERROR;
+	cargar_gimnasios(gimnasios);
+	
 
-	personaje_t* personaje = cargar_personaje("Personajes/Kanto/Ash.txt");
+	cargar_personaje("Personajes/Kanto/Ash.txt");
+	
+	return OK;
+}
+
+
+
+int main(){
+
+	heap_t* gimnasios = NULL;
+	personaje_t* jugador = NULL;
+	if(cargar_estructuras(jugador, gimnasios)==ERROR_FATAL){
+		printf("Error crítico en la creacion de estructuras, imposible continuar!!\n");
+	}
 
 	mostrar_gimnasios(gimnasios);
 	return 0;

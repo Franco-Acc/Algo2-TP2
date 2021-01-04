@@ -13,6 +13,7 @@ typedef struct pokemon{
 	size_t velocidad;
 	size_t defensa;
 	size_t ataque;
+	size_t bonus;
 }pokemon_t;
 
 typedef int (*funcion_batalla)(void*, void *);
