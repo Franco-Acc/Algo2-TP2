@@ -643,7 +643,7 @@ void tomar_prestado(personaje_t* jugador, entrenador_t* lider){
 			printf("A continuacion se muestra tu equipo, %s de %s\n", jugador->nombre, jugador->ciudad_natal);
 			mostrar_equipo(jugador->equipo);
 			printf("Ingrese la posicion del pokemon que desea reemplazar o -1 si se arrepiente\n");
-			int posicion = pedir_posicion_pokemon(lista_elementos(jugador->equipo));
+			posicion = pedir_posicion_pokemon(lista_elementos(jugador->equipo));
 			pokemon_t* pokemon_jugador = obtener_pokemon_en_posicion(jugador->equipo, posicion);
 			printf("Pokemon seleccionado:\n");
 			es_lo_esperado = pedir_confirmacion();
@@ -651,7 +651,43 @@ void tomar_prestado(personaje_t* jugador, entrenador_t* lider){
 	}
 
 	if(posicion>=0)
-		aniadir_pokemon_al_equipo(jugador, pokemon_lider, posicion);	
+		aniadir_pokemon_al_equipo(jugador, pokemon_lider, posicion);
+}
+
+void eliminar_pokemon_en_posicion(lista_t* pokemones, size_t posicion){
+	 liberar_pokemon(lista_elemento_en_posicion(pokemones, posicion));
+	 lista_borrar_de_posicion(pokemones, posicion);
+}
+
+void cambiar_equipo(personaje_t* jugador){
+	bool es_lo_esperado = false;
+	while(!es_lo_esperado){
+		printf("A continuacion se muestra tu equipo, %s de %s\n", jugador->nombre, jugador->ciudad_natal);
+		mostrar_equipo(jugador->equipo);
+		printf("Ingrese la posicion del pokemon que desea reemplazar o -1 si se arrepiente\n");
+		int posicion = pedir_posicion_pokemon(lista_elementos(jugador->equipo));
+		pokemon_t* pokemon_equipo = obtener_pokemon_en_posicion(jugador->equipo, posicion);
+		printf("Pokemon seleccionado:\n");
+		es_lo_esperado = pedir_confirmacion();
+	}
+
+	if(posicion>=0){
+		es_lo_esperado = false;
+		while(!es_lo_esperado){
+			printf("A continuacion se muestran tus pokemones capturados\n");
+			mostrar_equipo(jugador->capturados);
+			printf("Ingrese la posicion del pokemon desee para reemplazar al seleccionado del equipo o -1 si se arrepiente\n");
+			posicion = pedir_posicion_pokemon(lista_elementos(jugador->equipo));
+			pokemon_t* pokemon_capturado = obtener_pokemon_en_posicion(jugador->equipo, posicion);
+			printf("Pokemon seleccionado:\n");
+			es_lo_esperado = pedir_confirmacion();
+		}
+	}
+
+	if(posicion>=0){
+		aniadir_pokemon_al_equipo(jugador, pokemon_lider, posicion);
+		eliminar_pokemon_en_posicion(jugador->capturados, posicion);
+	}
 }
 
 
@@ -671,6 +707,38 @@ void menu_victoria(personaje_t* jugador, entrenador_t* lider){
 	ejecutar_instruccion_menu_victoria(letra, jugador, lider, &ya_robo);
 	if(letra!=PROXIMO)
 		return menu_victoria(jugador, lider);
+}
+
+void mostrar_opciones_menu_derrota(){
+	printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
+	printf(" %c --> Cambiar los pokemones en tu equipo con aquellos que hayas capturado\n", CAMBIAR_EQUIPO);
+	printf(" %c --> Reintentar gimnaio\n", REINTENTAR);
+	printf(" %c --> REndirse\n", RENDIRSE);
+}
+
+char pedir_instruccion_derrota(){
+	printf("Ingrese uno de los comandos de arriva...\n");
+	char letra = getchar();
+	if(letra!=REINTENTAR && letra!=CAMBIAR_EQUIPO && letra!=RENDIRSE){
+		printf("El comando ingresado no es valido\n");
+		return pedir_instruccion_derrota();
+	}
+	return letra;
+}
+
+void ejecutar_instruccion_menu_derrota(char letra, personaje_t* jugador){
+	if(letra==CAMBIAR_EQUIPO)
+		cambiar_equipo(jugador);
+}
+
+char menu_derrota(personaje_t* jugador){
+	system("clear");
+	mostrar_opciones_menu_derrota();
+	char letra = pedir_instruccion_derrota();
+	ejecutar_instruccion_menu_derrota(letra, jugador);
+	if(letra==CAMBIAR_EQUIPO)
+		return menu_derrota(jugador);
+	return letra;
 }
 
 
@@ -858,7 +926,6 @@ int main(){
 		jugar(jugador, gimnasios);
 	else
 		simular();
-
 	return 0;
 }
 
