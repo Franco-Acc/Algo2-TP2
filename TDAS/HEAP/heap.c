@@ -127,6 +127,13 @@ void heap_destruir(heap_t* heap){
 	free(heap);
 }
 
+bool heap_vacio(heap_t* heap){
+	if(!heap)
+		return false;
+	if(heap->tope > 0)
+		return false;
+	return true;
+}
 
 
 
