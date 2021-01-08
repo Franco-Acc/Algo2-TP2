@@ -13,6 +13,11 @@
 #define ENTRENADOR 'E'
 #define POKEMON 'P'
 
+#define INGRESAR_JUGADOR 'E'
+#define INGRESAR_GIMNASIO 'A'
+#define JUGAR 'I'
+#define SIMULAR 'S'
+
 #define PROXIMO 'N'
 #define REINTENTAR 'R'
 #define RENDIRSE 'F'
@@ -71,14 +76,14 @@ int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2){
 }
 
 
-void liberar_pokemnon (pokemon_t* pokemon){
+void liberar_pokemon (pokemon_t* pokemon){
 	free(pokemon);
 }
 
 
 void liberar_equipo(lista_t* equipo){
 	while(!lista_vacia(equipo)){
-		liberar_pokemnon(lista_primero(equipo));
+		liberar_pokemon(lista_primero(equipo));
 		lista_desencolar(equipo);
 	}
 	lista_destruir(equipo);
@@ -410,6 +415,10 @@ void cargar_personaje(personaje_t* jugador){
 
 
 void imprimir_pokemon(pokemon_t* pokemon){
+	if(!pokemon){
+		printf("No se selecciono un pokemon\n");
+		return;
+	}
 	printf("\t%s\n", pokemon->nombre);
 	printf("Tipo: %s\n", pokemon->tipo);
 	printf("V: %u\t", pokemon->velocidad);
@@ -495,7 +504,7 @@ void menu_combate(pokemon_t* pokemon_jugador, pokemon_t* pokemon_entrenador, int
 	printf("V: %u \t\t\t V: %u \n", pokemon_jugador->velocidad, pokemon_entrenador->velocidad);
 	printf("A: %u \t\t\t A: %u \n", pokemon_jugador->ataque, pokemon_entrenador->ataque);
 	printf("D: %u \t\t\t D: %u \n", pokemon_jugador->defensa, pokemon_entrenador->defensa);
-	if(resultado==GANO_PRIMERO)
+	if(resultado_combate==GANO_PRIMERO)
 		printf("TU POKEMON GANA!!\n");
 	else 
 		printf("TU POKEMON PIERDE!!\n");
@@ -561,7 +570,7 @@ void mostrar_opciones_menu_victoria(bool ya_robo){
 
 char pedir_instruccion_victoria(bool ya_robo){
 	printf("Ingrese uno de los comandos de arriva...\n");
-	char letra = getchar();
+	char letra = (char)getchar();
 	if(letra!=TOMAR_PRESTADO && letra!=CAMBIAR_EQUIPO && letra!=PROXIMO){
 		printf("El comando ingresado no es valido\n");
 		return pedir_instruccion_victoria(ya_robo);
@@ -587,22 +596,14 @@ pokemon_t* obtener_pokemon_en_posicion(lista_t* equipo, int posicion){
 		printf("No se seleccionó ningun pokemon\n");
 		return NULL;
 	}
-
-	lista_iterador_t* iterador_equipo = lista_iterador_crear(equipo);
-	int i=0
-	while(i<posicion){
-		lista_iterador_avanzar(iterador_equipo);
-		i++;
-	}
-		pokemon_t* pokemon_actual = lista_iterador_elemento_actual(iterador_equipo);
-		lista_iterador_destruir(iterador_equipo);
-		return pokemon_actual;
+	return lista_elemento_en_posicion(equipo, (size_t)posicion);
 }
 
 
 bool pedir_confirmacion(){
 	printf("Es esto correcto? Y/N: ");
-	char respuesta = getchar();
+	char respuesta;
+	scanf(" %c", &respuesta);
 
 	if((respuesta!=SI) && (respuesta!=NO)){
 		printf("\nSolo se acepta Y o N (mayúscula)\n");
@@ -626,8 +627,8 @@ void aniadir_pokemon_al_equipo(personaje_t* jugador, pokemon_t* pokemon_lider, s
 
 	(*nuevo_pkm) = (*pokemon_lider);
 
-	if(lista_elementos(entrenador->equipo)<MAX_EQUIPO){
-		if(lista_encolar(entrenador->equipo, nuevo_pkm)==ERROR){
+	if(lista_elementos(jugador->equipo)<MAX_EQUIPO){
+		if(lista_encolar(jugador->equipo, nuevo_pkm)==ERROR){
 			printf("Error al insertar el pokemon del entrenador al equipo\n");
 			free(nuevo_pkm);
 			return;
@@ -636,7 +637,7 @@ void aniadir_pokemon_al_equipo(personaje_t* jugador, pokemon_t* pokemon_lider, s
 	}
 
 
-	if(lista_encolar(personaje->capturados, lista_elemento_en_posicion(jugador->equipo, posicion_a_ocupar))==ERROR){
+	if(lista_encolar(jugador->capturados, lista_elemento_en_posicion(jugador->equipo, posicion_a_ocupar))==ERROR){
 		printf("Error al mover el pokemon del equipo a capturados\n");
 			free(nuevo_pkm);
 			return;
@@ -657,12 +658,14 @@ void aniadir_pokemon_al_equipo(personaje_t* jugador, pokemon_t* pokemon_lider, s
 
 void tomar_prestado(personaje_t* jugador, entrenador_t* lider){
 	bool es_lo_esperado = false;
+	int posicion = -1;
+	pokemon_t* pokemon_lider = NULL;
 	while(!es_lo_esperado){
 		printf("A continuacion se muestra el equipo del lider de gimnasio %s\n", lider->nombre);
 		mostrar_equipo(lider->equipo);
 		printf("Ingrese la posicion del pokemon que desea tomar o -1 si no deseea ninguno\n");
-		int posicion = pedir_posicion_pokemon(lista_elementos(lider->equipo));
-		pokemon_t* pokemon_lider = obtener_pokemon_en_posicion(lider->equipo, posicion);
+		posicion = pedir_posicion_pokemon(lista_elementos(lider->equipo));
+		pokemon_lider = obtener_pokemon_en_posicion(lider->equipo, posicion);
 		printf("Pokemon seleccionado:\n");
 		imprimir_pokemon(pokemon_lider);
 		es_lo_esperado = pedir_confirmacion();
@@ -677,12 +680,13 @@ void tomar_prestado(personaje_t* jugador, entrenador_t* lider){
 			posicion = pedir_posicion_pokemon(lista_elementos(jugador->equipo));
 			pokemon_t* pokemon_jugador = obtener_pokemon_en_posicion(jugador->equipo, posicion);
 			printf("Pokemon seleccionado:\n");
+			imprimir_pokemon(pokemon_jugador);
 			es_lo_esperado = pedir_confirmacion();
 		}
 	}
 
 	if(posicion>=0)
-		aniadir_pokemon_al_equipo(jugador, pokemon_lider, posicion);
+		aniadir_pokemon_al_equipo(jugador, pokemon_lider, (size_t)posicion);
 }
 
 void eliminar_pokemon_en_posicion(lista_t* pokemones, size_t posicion){
@@ -692,13 +696,16 @@ void eliminar_pokemon_en_posicion(lista_t* pokemones, size_t posicion){
 
 void cambiar_equipo(personaje_t* jugador){
 	bool es_lo_esperado = false;
+	int posicion = -1;
+	pokemon_t* pokemon_capturado;
 	while(!es_lo_esperado){
 		printf("A continuacion se muestra tu equipo, %s de %s\n", jugador->nombre, jugador->ciudad_natal);
 		mostrar_equipo(jugador->equipo);
 		printf("Ingrese la posicion del pokemon que desea reemplazar o -1 si se arrepiente\n");
-		int posicion = pedir_posicion_pokemon(lista_elementos(jugador->equipo));
+		posicion = pedir_posicion_pokemon(lista_elementos(jugador->equipo));
 		pokemon_t* pokemon_equipo = obtener_pokemon_en_posicion(jugador->equipo, posicion);
 		printf("Pokemon seleccionado:\n");
+		imprimir_pokemon(pokemon_equipo);
 		es_lo_esperado = pedir_confirmacion();
 	}
 
@@ -709,15 +716,16 @@ void cambiar_equipo(personaje_t* jugador){
 			mostrar_equipo(jugador->capturados);
 			printf("Ingrese la posicion del pokemon desee para reemplazar al seleccionado del equipo o -1 si se arrepiente\n");
 			posicion = pedir_posicion_pokemon(lista_elementos(jugador->equipo));
-			pokemon_t* pokemon_capturado = obtener_pokemon_en_posicion(jugador->equipo, posicion);
+			pokemon_capturado = obtener_pokemon_en_posicion(jugador->equipo, posicion);
 			printf("Pokemon seleccionado:\n");
+			imprimir_pokemon(pokemon_capturado);
 			es_lo_esperado = pedir_confirmacion();
 		}
 	}
 
 	if(posicion>=0){
-		aniadir_pokemon_al_equipo(jugador, pokemon_lider, posicion);
-		eliminar_pokemon_en_posicion(jugador->capturados, posicion);
+		aniadir_pokemon_al_equipo(jugador, pokemon_capturado, (size_t)posicion);
+		eliminar_pokemon_en_posicion(jugador->capturados, (size_t)posicion);
 	}
 }
 
@@ -749,7 +757,8 @@ void mostrar_opciones_menu_derrota(){
 
 char pedir_instruccion_derrota(){
 	printf("Ingrese uno de los comandos de arriva...\n");
-	char letra = getchar();
+	char letra;
+	scanf(" %c", &letra);
 	if(letra!=REINTENTAR && letra!=CAMBIAR_EQUIPO && letra!=RENDIRSE){
 		printf("El comando ingresado no es valido\n");
 		return pedir_instruccion_derrota();
@@ -780,17 +789,19 @@ int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simul
 	lista_t* pila_aux_entrenadores = lista_crear();
 	bool fue_derrotado = false;
 	int resultado_duelo = 0;
+	entrenador_t* entrenador_actual = NULL;
 
 	while(!lista_vacia(gimnasio->entrenadores) && !fue_derrotado){
-		resultado_duelo = duelo_pokemon(jugador->equipo, lista_tope(gimnasio->entrenadores)->equipo, gimnasio->reglas_de_batalla, es_simulacion);
+		entrenador_actual = lista_tope(gimnasio->entrenadores);
+		resultado_duelo = duelo_pokemon(jugador->equipo, entrenador_actual->equipo, gimnasio->reglas_de_batalla, es_simulacion);
 		if(resultado_duelo==VICTORIA){
 			if(!es_simulacion)
-				printf("Venciste a %s\n", lista_tope(gimnasio->entrenadores)->nombre);
+				printf("Venciste a %s\n", entrenador_actual->nombre);
 			trasladar_ultimo_entrenador(gimnasio->entrenadores, pila_aux_entrenadores);
 		}
 		else{
 			if(!es_simulacion)
-				printf("Fuiste derrotado por %s\n", lista_tope(gimnasio->entrenadores)->nombre);
+				printf("Fuiste derrotado por %s\n", entrenador_actual->nombre);
 			fue_derrotado = true;
 		}
 	}
@@ -840,7 +851,7 @@ void cargar_gimnasios(heap_t* gimnasios){
 	}
 }
 
-
+/*
 
 int cargar_estructuras(personaje_t* jugador, heap_t* gimnasios){
 	
@@ -855,6 +866,8 @@ int cargar_estructuras(personaje_t* jugador, heap_t* gimnasios){
 	return OK;
 }
 
+*/
+
 
 void mostrar_opciones_menu_inicial(){
 	printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
@@ -866,7 +879,8 @@ void mostrar_opciones_menu_inicial(){
 
 char pedir_instruccion_inicial(){
 	printf("Ingrese uno de los comandos de arriva...\n");
-	char letra = getchar();
+	char letra;
+	scanf(" %c", &letra);
 	if(letra!=INGRESAR_JUGADOR && letra!=INGRESAR_GIMNASIO && letra!=JUGAR && letra!=SIMULAR){
 		printf("El comando ingresado no es valido\n");
 		return pedir_instruccion_inicial();
@@ -894,30 +908,32 @@ char menu_inicial(personaje_t* jugador, heap_t* gimnasios){
 		ejecutar_instruccion_menu_inicial(letra, jugador, gimnasios);
 	}
 
-	if(!jugador || heap_vacio(gimnaios)){
+	if(!jugador || heap_vacio(gimnasios)){
 		printf("Debe cargarse necesariamente el personaje principla y al menos un gimnasio para jugar\n");
-		return menu_inicial(jugador, gimnasios)
+		return menu_inicial(jugador, gimnasios);
 	}
 	return letra;
 }
 
 
-
+void aniadir_medalla(personaje_t* jugador){
+	jugador->medallas_ganadas++;
+}
 
 
 void jugar(personaje_t* jugador, heap_t* gimnasios){
 	bool se_rinde = false;
 	int resultado;
-	gimnasio_t gimnasio_actual = heap_extraer_minimal(gimnaios);
+	gimnasio_t* gimnasio_actual = heap_extraer_minimal(gimnasios);
 
-	while(gimnasio_actual && !se_rinde){
+	while(gimnasio_actual && (!se_rinde)){
 		printf("Ahora te enfrentaras al %s\n", gimnasio_actual->nombre);
 		resultado = enfrentar_gimnasio(jugador, gimnasio_actual, false);
 		if(resultado==VICTORIA){
 			printf("Has obtenido la medalla de %s\n", gimnasio_actual->nombre);
 			aniadir_medalla(jugador);
-			destructor_gimnasios(gimnasio_actual);
-			gimnasio_actual = heap_extraer_minimal(gimnaios);
+			destructor_gimnasios((void*)gimnasio_actual);
+			gimnasio_actual = heap_extraer_minimal(gimnasios);
 		}else if(resultado==DERROTA){
 			printf("Has sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
 			se_rinde = true;
@@ -925,11 +941,26 @@ void jugar(personaje_t* jugador, heap_t* gimnasios){
 			printf("Falta el jugador y/o gimnasio\n");
 			se_rinde = true;
 		}
-
 	}
-
 }
 
+void simular(personaje_t* jugador, heap_t* gimnasios){
+	int resultado = VICTORIA;
+	gimnasio_t* gimnasio_actual = heap_extraer_minimal(gimnasios);
+
+	while(gimnasio_actual && resultado==VICTORIA){
+		resultado = enfrentar_gimnasio(jugador, gimnasio_actual, false);
+		if(resultado==VICTORIA){
+			aniadir_medalla(jugador);
+			destructor_gimnasios((void*)gimnasio_actual);
+			gimnasio_actual = heap_extraer_minimal(gimnasios);
+		}else if(resultado==DERROTA){
+			printf("Has sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
+		}else{
+			printf("Falta el jugador y/o gimnasio\n");
+		}
+	}
+}
 
 
 
@@ -945,12 +976,12 @@ int main(){
 
 	printf("Bienvenidos a la gran aventura pokemon!!\n");
 	
-	char instruccion = menu_inicial(jugador, gimnasio);
+	char instruccion = menu_inicial(jugador, gimnasios);
 
 	if(instruccion == JUGAR)
 		jugar(jugador, gimnasios);
 	else
-		simular();
+		simular(jugador, gimnasios);
 	return 0;
 }
 

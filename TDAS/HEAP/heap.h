@@ -44,7 +44,7 @@ int heap_insertar(heap_t* heap, void* elemento);
  * Devuelve true si el heap está vacio y false si no lo está o no existe.
  * El heap admite elementos con valores repetidos.
  */
-bool heap_vacio(heap_t heap);
+bool heap_vacio(heap_t* heap);
 
 /*
  *Devuelve el elemento almacenado en la raiz o NULL si el heap esta vacio.

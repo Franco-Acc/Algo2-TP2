@@ -41,11 +41,16 @@ heap_t* heap_crear(heap_comparador comparador, heap_liberar_elemento destructor)
 int heap_insertar(heap_t* heap, void* elemento);
 
 /*
+ * Devuelve true si el heap está vacio y false si no lo está o no existe.
+ * El heap admite elementos con valores repetidos.
+ */
+bool heap_vacio(heap_t* heap);
+
+/*
  *Devuelve el elemento almacenado en la raiz o NULL si el heap esta vacio.
  *La nueva raiz luego de la extraccion sera el ultimo elemento del ultimo nivel completo.
  */
 void* heap_extraer_minimal(heap_t* heap);
-
 
 void heap_destruir(heap_t* heap);
 
