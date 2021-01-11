@@ -75,7 +75,7 @@ heap_t* heap_crear(heap_comparador comparador, heap_liberar_elemento destructor)
 
 
 int heap_insertar(heap_t* heap, void* elemento){
-	void** vector_aux = realloc(heap->vector, sizeof(void*) * heap->tope+1);
+	void** vector_aux = realloc(heap->vector, sizeof(void**) * (heap->tope+1));
 	if(!vector_aux)
 		return ERROR;
 	
@@ -83,7 +83,7 @@ int heap_insertar(heap_t* heap, void* elemento){
 	heap->vector[heap->tope] = elemento;
 	heap->tope++;
 	
-	sift_up(heap, heap->tope-1);
+	sift_up(heap, (heap->tope-1));
 		
 	return OK;
 }

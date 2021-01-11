@@ -985,25 +985,74 @@ void simular(personaje_t* jugador, heap_t* gimnasios){
 
 
 
-int main(){
 
-	heap_t* gimnasios = heap_crear(comparador_gimnasios, destructor_gimnasios);
-	if(!gimnasios){
-		printf("Error en la reserva de memeoria para el heap de gimnasios\n");
-		return 0;
-	}
-	
-	personaje_t* jugador = NULL;
+void probar_creacion_heap(){
+    heap_t* heap = heap_crear(comparador_gimnasios, destructor_gimnasios);
+    pa2m_afirmar(heap, "Puedo crear un heap");
+    pa2m_afirmar(heap->comparador && heap->destructor, "El mismo posee el comparador y el destructor");
+    pa2m_afirmar(heap_vacio(heap), "El heap se crea vacio");
+    heap_destruir(heap);
+}
 
-	printf("Bienvenidos a la gran aventura pokemon!!\n");
-	
-	char instruccion = menu_inicial(&jugador, gimnasios);
+void probar_insercion(){
+    heap_t* heap = heap_crear(comparador_gimnasios, destructor_gimnasios);
 
-	if(instruccion == JUGAR)
-		jugar(jugador, gimnasios);
-	else
-		simular(jugador, gimnasios);
-	return 0;
+    cargar_gimnasio(heap, "Gimnasios/Kanto/Misty.txt");
+    
+    pa2m_afirmar(!heap_vacio(heap), "Al insertar un gimnasio el heap deja de estar vacio");
+    gimnasio_t* gimnasio_1 = NULL;
+    gimnasio_t* gimnasio_2 = NULL;
+    
+    gimnasio_1 = heap_extraer_minimal(heap);
+
+    pa2m_afirmar(gimnasio_1, "Puedo extraer el gimnasio insertado");
+
+
+
+    pa2m_afirmar(gimnasio_1->dificultad == 20, "La dificultad del gimnasio es la esperada");
+    pa2m_afirmar(lista_elementos(gimnasio_1->entrenadores) == 3, "La cantidad de entrenadores del gimnasio es la esperada");
+    printf("entrenadores: %i\n", lista_elementos(gimnasio_1->entrenadores));
+
+    printf("%s\n", ((entrenador_t*)lista_tope(gimnasio_1->entrenadores))->nombre);
+    pa2m_afirmar(lista_elementos(((entrenador_t*)lista_tope(gimnasio_1->entrenadores))->equipo) == 2, "El primer entrenador a enfrentar del gimnasio tiene la cantidad esperada de pokemones");
+    printf("Pokemones del entrenador: %i\n", lista_elementos(((entrenador_t*)lista_tope(gimnasio_1->entrenadores))->equipo));
+
+    gimnasio_2 = heap_extraer_minimal(heap);
+    pa2m_afirmar(heap_vacio(heap), "El heap queda vacio");
+    pa2m_afirmar(!gimnasio_2, "Intentar extraer otro gimnasio solo devuelve NULL");
+    liberar_gimnasio(gimnasio_1);
+    heap_destruir(heap);
 }
 
 
+void probar_personaje(){
+    personaje_t* jugador = NULL;
+
+    FILE* archivo_personaje = fopen("Personajes/Kanto/Ash.txt", "r");
+    jugador = leer_archivo_personaje(archivo_personaje);
+    fclose(archivo_personaje);
+
+    pa2m_afirmar(jugador, "El jugador existe, no es NULL");
+    pa2m_afirmar(jugador->medallas_ganadas == 0, "El jugador comienza sin medallas");
+    pa2m_afirmar(jugador->medallas_ganadas == 0, "El jugador comienza sin medallas");
+    pa2m_afirmar(lista_elementos(jugador->equipo) == MAX_EQUIPO, "El equipo esta completo como se esperaba");
+    printf("Equipo: %i\n", lista_elementos(jugador->equipo));
+    pa2m_afirmar(lista_elementos(jugador->capturados) == 5, "La cantidad de capturados es la esperada");
+    printf("Capturados: %i\n", lista_elementos(jugador->capturados));
+    liberar_jugador(jugador);
+}
+
+
+int main(){
+    /*
+pa2m_nuevo_grupo("+)PRUEBAS DE HEAP");
+    probar_creacion_heap();
+pa2m_nuevo_grupo("+)PRUEBAS DE GIMNASIO");
+    probar_insercion();
+    */
+pa2m_nuevo_grupo("+)PRUEBAS DE PERSONAJE");
+    probar_personaje();
+
+    pa2m_mostrar_reporte();
+    return 0;
+}
