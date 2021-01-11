@@ -1,23 +1,7 @@
 #ifndef __BATALLAS_H__
 #define __BATALLAS_H__
 
-#define GANO_PRIMERO 1
-#define GANO_SEGUNDO -1
-
-#define MAX_NOMBRE_PKM 50
-#define MAX_TIPO 20
-
-typedef struct pokemon{
-	char nombre[MAX_NOMBRE_PKM];
-	char tipo[MAX_TIPO];
-	size_t velocidad;
-	size_t defensa;
-	size_t ataque;
-	size_t bonus;
-}pokemon_t;
-
-typedef int (*funcion_batalla)(void*, void *);
-
+#include "estructuras.h"
 /*
  * Se deberan implementar las 5 funciones de batalla.
  * Las reglas para decidir al ganador las inventan ustedes

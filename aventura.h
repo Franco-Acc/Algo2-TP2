@@ -1,13 +1,11 @@
 #ifndef __AVENTURA_H__
 #define __AVENTURA_H__
 
-#define MAX_DIRECCION 100
-#define MAX_NOMBRE 100
-#define MAX_EQUIPO 6
+#include "estructuras.h"
 
-#define OK 0
-#define ERROR -1
-
-//int cargar_gimnasio(heap_t* heap, char direccion_gimasio[MAX_DIRECCION]);
+void jugar(personaje_t* jugador, heap_t* gimnasios);
+void simular(personaje_t* jugador, heap_t* gimnasios);
+void destructor_gimnasios(void* gimnasio);
+int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2);
 
 #endif /* __AVENTURA_H__ */

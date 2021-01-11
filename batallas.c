@@ -1,12 +1,5 @@
 
-#include <string.h>
 #include "batallas.h"
-
-#define AGUA "Agua"
-#define TIERRA "Tierra"
-#define FUEGO "Fuego"
-#define AIRE "Aire"
-
 
 //Pre: Ambos pokemones deben ser validos (Se supine que la validacion ya fue hecha llegados a este punto)
 //Post: El primer pokemon solo gana cuando es es del tipo ventajoso respcto a su oponente, en casa de ser
