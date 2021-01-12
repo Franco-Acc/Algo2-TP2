@@ -1,16 +1,16 @@
 
 #include "batallas.h"
 
-//Pre: Ambos pokemones deben ser validos (Se supine que la validacion ya fue hecha llegados a este punto)
-//Post: El primer pokemon solo gana cuando es es del tipo ventajoso respcto a su oponente, en casa de ser
-//		del mismo tipo o cualquir otro caso gana el segundo.
+//Pre: Ambos pokemones deben ser validos (Se supone que la validacion ya fue hecha llegados a este punto)
+//Post: El primer pokemon gana cuando es del mismo tipo o del 'ventajoso' respecto a su oponente, en casa de ser
+//		cualquier otro caso gana el segundo.
 int funcion_batalla_1(void* pkm_1, void* pkm_2){
-	if( (strcmp(((pokemon_t*)pkm_1)->tipo, AGUA)==0 && strcmp(((pokemon_t*)pkm_2)->tipo, FUEGO)==0)   ||
-		(strcmp(((pokemon_t*)pkm_1)->tipo, FUEGO)==0 && strcmp(((pokemon_t*)pkm_2)->tipo, TIERRA)==0) ||
-		(strcmp(((pokemon_t*)pkm_1)->tipo, TIERRA)==0 && strcmp(((pokemon_t*)pkm_2)->tipo, AIRE)==0)  ||
-		(strcmp(((pokemon_t*)pkm_1)->tipo, AIRE)==0 && strcmp(((pokemon_t*)pkm_2)->tipo, AGUA)==0)    )
-		return GANO_PRIMERO;
-	return GANO_SEGUNDO;
+	if( (strcmp(((pokemon_t*)pkm_1)->tipo, FUEGO)==0 && strcmp(((pokemon_t*)pkm_2)->tipo, AGUA)==0)   ||
+		(strcmp(((pokemon_t*)pkm_1)->tipo, TIERRA)==0 && strcmp(((pokemon_t*)pkm_2)->tipo, FUEGO)==0) ||
+		(strcmp(((pokemon_t*)pkm_1)->tipo, AIRE)==0 && strcmp(((pokemon_t*)pkm_2)->tipo, TIERRA)==0)  ||
+		(strcmp(((pokemon_t*)pkm_1)->tipo, AGUA)==0 && strcmp(((pokemon_t*)pkm_2)->tipo, AIRE)==0)    )
+		return GANO_SEGUNDO;
+	return GANO_PRIMERO;
 }
 
 //Pre: Ambos pokemones deben ser validos

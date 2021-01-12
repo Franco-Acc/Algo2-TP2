@@ -6,11 +6,11 @@ void imprimir_pokemon(pokemon_t* pokemon){
         printf("No se selecciono un pokemon\n");
         return;
     }
-    printf("\t%s\n", pokemon->nombre);
-    printf("Tipo: %s\n", pokemon->tipo);
-    printf("V: %u\t", pokemon->velocidad);
-    printf("A: %u\t", pokemon->ataque);
-    printf("D: %u\n", pokemon->defensa);
+    printf(AMARILLO"%-50s\n", pokemon->nombre);
+    printf(NORMAL"Tipo: %-20s\n", pokemon->tipo);
+    printf("V: %u + %u\n", pokemon->velocidad, pokemon->bonus);
+    printf("A: %u + %u\n", pokemon->ataque, pokemon->bonus);
+    printf("D: %u + %u\n\n", pokemon->defensa, pokemon->bonus);
 }
 
 void mostrar_equipo(lista_t* equipo){
@@ -53,8 +53,9 @@ void imprimir_gimnasio(gimnasio_t* gimnasio){
 
 
 void mostrar_gimnasios(heap_t* gimnasios){
-    if(!gimnasios)
+    if(!gimnasios){
         return;
+    }
 
     gimnasio_t* gimnasio = heap_extraer_minimal(gimnasios);
 
@@ -70,8 +71,9 @@ void mostrar_gimnasios(heap_t* gimnasios){
 
 void mostrar_opciones_menu_victoria(bool ya_robo){
     printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
-    if(!ya_robo)
+    if(!ya_robo){
         printf(" %c --> Elegir uno de los pokemones del equipo del lider derrotado para añadirlo a tu equipo\n", TOMAR_PRESTADO);
+    }
     printf(" %c --> Cambiar los pokemones en tu equipo con aquellos que hayas capturado\n", CAMBIAR_EQUIPO);
     printf(" %c --> Siguiente gimnaio\n", PROXIMO);
 }
@@ -94,8 +96,10 @@ char pedir_instruccion_victoria(bool ya_robo){
 int pedir_posicion_pokemon(size_t tope_equipo){
     int posicion;
     scanf("%i", &posicion);
-    if(posicion>=tope_equipo)
+    if(posicion >= (int)tope_equipo){
+        printf("Debes elegir una posicion válida\n");
         return pedir_posicion_pokemon(tope_equipo);
+    }
     return posicion;
 }
 
@@ -181,6 +185,7 @@ char pedir_instruccion_inicial(){
     printf("Ingrese uno de los comandos de arriva...\n");
     char letra;
     scanf(" %c", &letra);
+    getchar();
     if(letra!=INGRESAR_JUGADOR && letra!=INGRESAR_GIMNASIO && letra!=JUGAR && letra!=SIMULAR){
         printf("El comando ingresado no es valido\n");
         return pedir_instruccion_inicial();

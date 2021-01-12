@@ -203,7 +203,9 @@ void restaurar_equipos(lista_t* lista_aux, lista_t* equipo){
 }
 
 void actualizar_estadisticas_pokemon(pokemon_t* pokemon){
-    pokemon->bonus++;
+    if(pokemon->bonus < MAX_BONUS){
+       pokemon->bonus++;
+    }
 }
 
 int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_batalla reglas_de_batalla, bool es_simulacion){
@@ -235,8 +237,12 @@ int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_b
         resultado_duelo = DERROTA;
     }
 
+    restaurar_equipos(equipo_jugador, lista_aux_jugador); // ESTO ES PARA MANTENER EL ORDEN ORIGINAL
     restaurar_equipos(lista_aux_jugador, equipo_jugador);
+
+    restaurar_equipos(equipo_entrenador, lista_aux_entrenador); // ESTO ES PARA MANTENER EL ORDEN ORIGINAL
     restaurar_equipos(lista_aux_entrenador, equipo_entrenador);
+
     lista_destruir(lista_aux_jugador);
     lista_destruir(lista_aux_entrenador);
     return resultado_duelo;
@@ -271,24 +277,24 @@ int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simul
         entrenador_actual = lista_tope(gimnasio->entrenadores);
         
         if(!es_simulacion){
-            printf("Ahora te enfrentarás con %s\n", entrenador_actual->nombre);
+            printf(NORMAL"\nAhora te enfrentarás con %s\n", entrenador_actual->nombre);
         }
         
         resultado_duelo = duelo_pokemon(jugador->equipo, entrenador_actual->equipo, gimnasio->reglas_de_batalla, es_simulacion);
 
         if(resultado_duelo==VICTORIA){
             if(!es_simulacion)
-                printf("Venciste a %s\n", entrenador_actual->nombre);
+                printf(VERDE"Venciste a %s\n", entrenador_actual->nombre);
             trasladar_ultimo_entrenador(gimnasio->entrenadores, pila_aux_entrenadores);
         }else{
-            if(!es_simulacion)
-                printf("Fuiste derrotado por %s\n", entrenador_actual->nombre);
+            printf(ROJO"Fuiste derrotado por %s\n", entrenador_actual->nombre);
             fue_derrotado = true;
         }
+        printf(NORMAL"");
     }
 
     if(!fue_derrotado && !es_simulacion)
-        menu_victoria(jugador, lista_tope(pila_aux_entrenadores));
+        menu_victoria(jugador, lista_tope(pila_aux_entrenadores), false);
 
     restaurar_gimnasio(pila_aux_entrenadores, gimnasio->entrenadores);
 

@@ -16,6 +16,8 @@
 #define MAX_EQUIPO 6
 #define MAX_TIPO 20
 
+#define MAX_BONUS 63
+
 #define OK 0
 #define ERROR -1
 
@@ -62,6 +64,11 @@
 
 #define FORMATO_LECTURA_PERSONAJE "%[^;];%[^\n]\n"
 #define CANT_ITEMS_PERSONAJE 2
+
+#define ROJO "\e[31m"
+#define VERDE "\e[32m"
+#define AMARILLO "\e[33m"
+#define NORMAL "\e[0m"
 
 
 typedef struct pokemon{

@@ -26,24 +26,26 @@ void jugar(personaje_t* jugador, heap_t* gimnasios){
     gimnasio_t* gimnasio_actual = heap_extraer_minimal(gimnasios);
 
     while(gimnasio_actual && (!se_rinde)){
-        printf("Ahora te enfrentaras al %s\n", gimnasio_actual->nombre);
+    	system("clear");
+        printf("\nAhora te enfrentaras al %s\n", gimnasio_actual->nombre);
         resultado = enfrentar_gimnasio(jugador, gimnasio_actual, false);
         if(resultado==VICTORIA){
-            printf("Has obtenido la medalla de %s\n", gimnasio_actual->nombre);
+            printf(VERDE"\nHas obtenido la medalla de %s\n", gimnasio_actual->nombre);
             aniadir_medalla(jugador);
             destructor_gimnasios((void*)gimnasio_actual);
             gimnasio_actual = heap_extraer_minimal(gimnasios);
         }else if(resultado==DERROTA){
-            printf("Has sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
+            printf(AMARILLO"\nHas sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
             se_rinde = true;
         }else{
-            printf("Falta el jugador y/o gimnasio\n");
+            printf(ROJO"Falta el jugador y/o gimnasio\n");
             se_rinde = true;
         }
+        printf(NORMAL"");
     }
 
     if(!se_rinde)
-        printf("Felicidades, has recolectado las %u medallas de gimnasio y ganada la LIga Pokemon!!\n", jugador->medallas_ganadas);
+        printf(VERDE"Felicidades, has recolectado las %u medallas de gimnasio y ganado la LIga Pokemon!!\n", jugador->medallas_ganadas);
 }
 
 void simular(personaje_t* jugador, heap_t* gimnasios){
@@ -51,15 +53,15 @@ void simular(personaje_t* jugador, heap_t* gimnasios){
     gimnasio_t* gimnasio_actual = heap_extraer_minimal(gimnasios);
 
     while(gimnasio_actual && resultado==VICTORIA){
-        resultado = enfrentar_gimnasio(jugador, gimnasio_actual, false);
+        resultado = enfrentar_gimnasio(jugador, gimnasio_actual, true);
         if(resultado==VICTORIA){
             aniadir_medalla(jugador);
             destructor_gimnasios((void*)gimnasio_actual);
             gimnasio_actual = heap_extraer_minimal(gimnasios);
         }else if(resultado==DERROTA){
-            printf("Has sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
+            printf(AMARILLO"Has sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
         }else{
-            printf("Falta el jugador y/o gimnasio\n");
+            printf(ROJO"Falta el jugador y/o gimnasio\n");
         }
     }
 }
@@ -87,10 +89,11 @@ int main(){
 	
 	char instruccion = menu_inicial(&jugador, gimnasios);
 
-	if(instruccion == JUGAR)
+	if(instruccion == JUGAR){
 		jugar(jugador, gimnasios);
-	else
+	}else{
 		simular(jugador, gimnasios);
+	}
 	return 0;
 }
 
