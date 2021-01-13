@@ -10,11 +10,14 @@
 #include "lista.h"
 #include "heap.h"
 
-#define MAX_DIRECCION 100
+#define MAX_DIRECCION 200
 #define MAX_NOMBRE 100
 #define MAX_NOMBRE_PKM 50
 #define MAX_EQUIPO 6
-#define MAX_TIPO 20
+#define MAX_TIPO 10
+
+#define MENOR -1
+#define MAYOR  1
 
 #define MAX_BONUS 63
 
@@ -46,6 +49,11 @@
 #define CAMBIAR_EQUIPO 'C'
 #define TOMAR_PRESTADO 'T'
 
+#define BATALLA 'B'
+#define MOSTRAR_JUGADOR 'E'
+#define MOSTRAR_GIMNASIO 'G'
+
+
 #define AGUA "Agua"
 #define TIERRA "Tierra"
 #define FUEGO "Fuego"
@@ -53,16 +61,16 @@
 
 #define FORMATO_LECTURA_PRIMERA_LETRA "%c;"
 
-#define FORMATO_LECTURA_GIMNASIO "%[^;];%u;%u\n"
+#define FORMATO_LECTURA_GIMNASIO "%99[^;];%u;%u\n"
 #define CANT_ITEMS_GIMNASIO 3
 
-#define FORMATO_LECTURA_ENTRENADOR "%[^\n]\n"
+#define FORMATO_LECTURA_ENTRENADOR "%99[^\n]\n"
 #define CANT_ITEMS_ENTRENADOR 1
 
-#define FORMATO_LECTURA_POKEMON "%[^;];%[^;];%u;%u;%u\n"
+#define FORMATO_LECTURA_POKEMON "%49[^;];%19[^;];%u;%u;%u\n"
 #define CANT_ITEMS_POKEMON 5
 
-#define FORMATO_LECTURA_PERSONAJE "%[^;];%[^\n]\n"
+#define FORMATO_LECTURA_PERSONAJE "%99[^;];%99[^\n]\n"
 #define CANT_ITEMS_PERSONAJE 2
 
 #define ROJO "\e[31m"
@@ -107,6 +115,10 @@ void liberar_pokemon (pokemon_t* pokemon);
 void liberar_equipo(lista_t* equipo);
 void liberar_entrenador(entrenador_t* entrenador);
 void liberar_entrenadores(lista_t* entrenadores);
+void liberar_gimnasios(heap_t* gimnasios);
+
+void destructor_gimnasios(void* gimnasio);
+int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2);
 
 void leer_primera_letra_de_linea(FILE* archivo_gimnasio, char* letra);
 void pedir_direccion(char* direccion);

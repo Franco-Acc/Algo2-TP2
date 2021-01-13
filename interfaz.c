@@ -1,6 +1,5 @@
 #include "interfaz.h"
 
-
 void imprimir_pokemon(pokemon_t* pokemon){
     if(!pokemon){
         printf("No se selecciono un pokemon\n");
@@ -23,6 +22,15 @@ void mostrar_equipo(lista_t* equipo){
     lista_iterador_destruir(iterador_equipo);
 }
 
+void mostrar_jugador(personaje_t* jugador){
+    printf("Nombre del jugador: %s\n", jugador->nombre);
+    printf("Ciudad de origen: %s\n", jugador->ciudad_natal);
+    printf("Medallas ganadas: %u\n", jugador->medallas_ganadas);
+    printf(VERDE"Equipo Pokemon:\n");
+    mostrar_equipo(jugador->equipo);
+    printf(VERDE"Pokemones Capturados:\n");
+    mostrar_equipo(jugador->capturados);
+}
 
 
 void imprimir_entrenador(entrenador_t* entrenador){
@@ -44,10 +52,11 @@ void imprimir_entrenadores(lista_t* entrenadores){
 }
 
 
-void imprimir_gimnasio(gimnasio_t* gimnasio){
-    printf("%s\n", gimnasio->nombre);
+void mostrar_gimnasio(gimnasio_t* gimnasio){
+    printf(AMARILLO"\n%s\n", gimnasio->nombre);
     printf("Dificultad del Gimnasio: %u\n", gimnasio->dificultad);
     printf("Entrenadores totales: %u\n", lista_elementos(gimnasio->entrenadores));
+    printf(NORMAL"");
     imprimir_entrenadores(gimnasio->entrenadores);
 }
 
@@ -60,7 +69,7 @@ void mostrar_gimnasios(heap_t* gimnasios){
     gimnasio_t* gimnasio = heap_extraer_minimal(gimnasios);
 
     while(gimnasio){
-        imprimir_gimnasio(gimnasio);
+        mostrar_gimnasio(gimnasio);
         printf("\n\n\n");
         gimnasio = heap_extraer_minimal(gimnasios);
     }
@@ -96,6 +105,7 @@ char pedir_instruccion_victoria(bool ya_robo){
 int pedir_posicion_pokemon(size_t tope_equipo){
     int posicion;
     scanf("%i", &posicion);
+    while(getchar()!='\n'){}
     if(posicion >= (int)tope_equipo){
         printf("Debes elegir una posicion válida\n");
         return pedir_posicion_pokemon(tope_equipo);
@@ -116,6 +126,7 @@ bool pedir_confirmacion(){
     printf("Es esto correcto? Y/N: ");
     char respuesta;
     scanf(" %c", &respuesta);
+    while(getchar()!='\n'){}
 
     if((respuesta!=SI) && (respuesta!=NO)){
         printf("\nSolo se acepta Y o N (mayúscula)\n");
@@ -143,6 +154,7 @@ char pedir_instruccion_derrota(){
     printf("Ingrese uno de los comandos de arriva...\n");
     char letra;
     scanf(" %c", &letra);
+    while(getchar()!='\n'){}
     if(letra!=REINTENTAR && letra!=CAMBIAR_EQUIPO && letra!=RENDIRSE){
         printf("El comando ingresado no es valido\n");
         return pedir_instruccion_derrota();
@@ -150,27 +162,6 @@ char pedir_instruccion_derrota(){
     return letra;
 }
 
-
-
-
-
-
-/*
-
-int cargar_estructuras(personaje_t* jugador, heap_t* gimnasios){
-    
-    heap_t* gimnasios = heap_crear(comparador_gimnasios, destructor_gimnasios);
-    if(!gimnasios)
-        return ERROR_FATAL;
-
-    cargar_gimnasios(gimnasios);
-
-    cargar_personaje(jugador);
-    
-    return OK;
-}
-
-*/
 
 
 void mostrar_opciones_menu_inicial(){
@@ -185,10 +176,32 @@ char pedir_instruccion_inicial(){
     printf("Ingrese uno de los comandos de arriva...\n");
     char letra;
     scanf(" %c", &letra);
-    getchar();
+    while(getchar()!='\n'){}
     if(letra!=INGRESAR_JUGADOR && letra!=INGRESAR_GIMNASIO && letra!=JUGAR && letra!=SIMULAR){
         printf("El comando ingresado no es valido\n");
         return pedir_instruccion_inicial();
+    }
+    return letra;
+}
+
+
+
+void mostrar_opciones_menu_gimnasio(){
+    printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
+    printf(" %c --> Mostrar al entrenador actual con su equipo\n", MOSTRAR_JUGADOR);
+    printf(" %c --> Mostrar el gimnasio octual\n", MOSTRAR_GIMNASIO);
+    printf(" %c --> Cambiar los pokemones en tu equipo con aquellos que hayas capturado\n", CAMBIAR_EQUIPO);
+    printf(" %c --> Avanzar al siguiente combate\n", BATALLA);
+}
+
+char pedir_instruccion_gimnasio(){
+    printf("Ingrese uno de los comandos de arriva...\n");
+    char letra;
+    scanf(" %c", &letra);
+    while(getchar()!='\n'){}
+    if(letra!=MOSTRAR_JUGADOR && letra!=MOSTRAR_GIMNASIO && letra!=CAMBIAR_EQUIPO && letra!=BATALLA){
+        printf("El comando ingresado no es valido\n");
+        return pedir_instruccion_gimnasio();
     }
     return letra;
 }

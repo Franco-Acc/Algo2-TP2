@@ -1,5 +1,14 @@
 #include "estructuras.h"
 
+
+int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2){
+    if(((gimnasio_t*)gimnasio_1)->dificultad < ((gimnasio_t*)gimnasio_2)->dificultad)
+        return MENOR;
+    else
+        return MAYOR;
+}
+
+
 void liberar_pokemon (pokemon_t* pokemon){
     free(pokemon);
 }
@@ -36,11 +45,28 @@ void liberar_entrenadores(lista_t* entrenadores){
     lista_destruir(entrenadores);
 }
 
+
+void destructor_gimnasios(void* gimnasio){
+    liberar_entrenadores(((gimnasio_t*)gimnasio)->entrenadores);
+    free(gimnasio);
+}
+
+
+void liberar_gimnasios(heap_t* gimnasios){
+    gimnasio_t* gimnasio_actual = heap_extraer_minimal(gimnasios);
+    while(gimnasio_actual){
+        destructor_gimnasios(gimnasio_actual);
+        gimnasio_actual = heap_extraer_minimal(gimnasios);
+    }
+    heap_destruir(gimnasios);
+}
+
+
 void leer_primera_letra_de_linea(FILE* archivo_gimnasio, char* letra){
     fscanf(archivo_gimnasio, FORMATO_LECTURA_PRIMERA_LETRA, letra);
 }
 
 void pedir_direccion(char* direccion){
     printf("\n Ingrese la direccion del archivo: ");
-    scanf("%500s", direccion);
+    scanf("%199s", direccion);
 }

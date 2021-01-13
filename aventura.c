@@ -3,19 +3,6 @@
 #include "personaje.h"
 #include "menus.h"
 
-
-void destructor_gimnasios(void* gimnasio){
-    liberar_entrenadores(((gimnasio_t*)gimnasio)->entrenadores);
-    free(gimnasio);
-}
-
-int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2){
-    if(((gimnasio_t*)gimnasio_1)->dificultad < ((gimnasio_t*)gimnasio_2)->dificultad)
-        return -1;
-    else
-        return 1;
-}
-
 void aniadir_medalla(personaje_t* jugador){
     jugador->medallas_ganadas++;
 }
@@ -36,16 +23,18 @@ void jugar(personaje_t* jugador, heap_t* gimnasios){
             gimnasio_actual = heap_extraer_minimal(gimnasios);
         }else if(resultado==DERROTA){
             printf(AMARILLO"\nHas sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
+            destructor_gimnasios((void*)gimnasio_actual);
             se_rinde = true;
         }else{
             printf(ROJO"Falta el jugador y/o gimnasio\n");
+            destructor_gimnasios((void*)gimnasio_actual);
             se_rinde = true;
         }
         printf(NORMAL"");
     }
 
     if(!se_rinde)
-        printf(VERDE"Felicidades, has recolectado las %u medallas de gimnasio y ganado la LIga Pokemon!!\n", jugador->medallas_ganadas);
+        printf(VERDE"Felicidades, has recolectado las %u medallas de gimnasio y ganado la Liga Pokemon!!\n", jugador->medallas_ganadas);
 }
 
 void simular(personaje_t* jugador, heap_t* gimnasios){
@@ -60,8 +49,10 @@ void simular(personaje_t* jugador, heap_t* gimnasios){
             gimnasio_actual = heap_extraer_minimal(gimnasios);
         }else if(resultado==DERROTA){
             printf(AMARILLO"Has sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
+            destructor_gimnasios((void*)gimnasio_actual);
         }else{
             printf(ROJO"Falta el jugador y/o gimnasio\n");
+            destructor_gimnasios((void*)gimnasio_actual);
         }
     }
 }
@@ -94,6 +85,10 @@ int main(){
 	}else{
 		simular(jugador, gimnasios);
 	}
+
+    liberar_jugador(jugador);
+    liberar_gimnasios(gimnasios);
+
 	return 0;
 }
 

@@ -139,6 +139,8 @@ void cambiar_equipo(personaje_t* jugador){
     if(posicion>=0){
         aniadir_pokemon_al_equipo(jugador, pokemon_capturado, (size_t)posicion);
         eliminar_pokemon_en_posicion(jugador->capturados, (size_t)posicion);
+        printf(VERDE"Transfrencia realizada con exito!!\n");
+        printf(NORMAL"");
     }
 }
 
@@ -152,7 +154,6 @@ void ejecutar_instruccion_menu_victoria(char letra, personaje_t* jugador, entren
 
 
 void menu_victoria(personaje_t* jugador, entrenador_t* lider, bool ya_robo){
-    system("clear");
     mostrar_opciones_menu_victoria(ya_robo);
     char letra = pedir_instruccion_victoria(ya_robo);
     ejecutar_instruccion_menu_victoria(letra, jugador, lider, &ya_robo);
@@ -167,7 +168,6 @@ void ejecutar_instruccion_menu_derrota(char letra, personaje_t* jugador){
 }
 
 char menu_derrota(personaje_t* jugador){
-    system("clear");
     mostrar_opciones_menu_derrota();
     char letra = pedir_instruccion_derrota();
     ejecutar_instruccion_menu_derrota(letra, jugador);
@@ -186,8 +186,6 @@ void ejecutar_instruccion_menu_inicial(char letra, personaje_t** jugador, heap_t
 }
 
 char menu_inicial(personaje_t** jugador, heap_t* gimnasios){
-    system("clear");
-
     mostrar_opciones_menu_inicial();
     char letra = pedir_instruccion_inicial();
     ejecutar_instruccion_menu_inicial(letra, jugador, gimnasios);
@@ -197,11 +195,13 @@ char menu_inicial(personaje_t** jugador, heap_t* gimnasios){
         ejecutar_instruccion_menu_inicial(letra, jugador, gimnasios);
     }
 
-    if(!(*jugador))
+    if(!(*jugador)){
         printf("No hay jugador\n");
+    }
 
-    if(heap_vacio(gimnasios))
+    if(heap_vacio(gimnasios)){
         printf("No hay gimnaios\n");
+    }
 
     if(!jugador || heap_vacio(gimnasios)){
         printf("Debe cargarse necesariamente el personaje principal y al menos un gimnasio para jugar\n");
@@ -209,4 +209,24 @@ char menu_inicial(personaje_t** jugador, heap_t* gimnasios){
     }
     return letra;
 }
+
+
+void ejecutar_instruccion_menu_gimnasio(char letra, personaje_t* jugador, gimnasio_t* gimnasio){
+    if(letra==MOSTRAR_JUGADOR)
+        mostrar_jugador(jugador);
+    if(letra==MOSTRAR_GIMNASIO)
+        mostrar_gimnasio(gimnasio);
+    if(letra==CAMBIAR_EQUIPO)
+        cambiar_equipo(jugador);
+}
+
+
+void menu_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio){
+    mostrar_opciones_menu_gimnasio();
+    char letra = pedir_instruccion_gimnasio();
+    ejecutar_instruccion_menu_gimnasio(letra, jugador, gimnasio);
+    if(letra!=BATALLA)
+        return menu_gimnasio(jugador, gimnasio);
+}
+
 

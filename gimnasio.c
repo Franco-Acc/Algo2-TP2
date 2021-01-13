@@ -274,9 +274,11 @@ int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simul
     entrenador_t* entrenador_actual = NULL;
 
     while(!lista_vacia(gimnasio->entrenadores) && !fue_derrotado){
+        
         entrenador_actual = lista_tope(gimnasio->entrenadores);
         
         if(!es_simulacion){
+            menu_gimnasio(jugador, gimnasio);
             printf(NORMAL"\nAhora te enfrentarás con %s\n", entrenador_actual->nombre);
         }
         
@@ -297,6 +299,7 @@ int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simul
         menu_victoria(jugador, lista_tope(pila_aux_entrenadores), false);
 
     restaurar_gimnasio(pila_aux_entrenadores, gimnasio->entrenadores);
+    lista_destruir(pila_aux_entrenadores);
 
     if(fue_derrotado && !es_simulacion){
         if(menu_derrota(jugador)==REINTENTAR)
