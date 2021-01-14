@@ -3,7 +3,13 @@
 #include "personaje.h"
 #include "menus.h"
 
+//Añade una medalla al personaje principal.
 void aniadir_medalla(personaje_t* jugador){
+    if(!jugador){
+        printf(ROJO"No existe el jugador, no se puede aniadir medalla!!\n");
+        printf(NORMAL"");
+        return;
+    }
     jugador->medallas_ganadas++;
 }
 
@@ -26,7 +32,7 @@ void jugar(personaje_t* jugador, heap_t* gimnasios){
             destructor_gimnasios((void*)gimnasio_actual);
             se_rinde = true;
         }else{
-            printf(ROJO"Falta el jugador y/o gimnasio\n");
+            printf(ROJO"ERROR\n");
             destructor_gimnasios((void*)gimnasio_actual);
             se_rinde = true;
         }

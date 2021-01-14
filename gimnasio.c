@@ -1,8 +1,9 @@
 
 #include "gimnasio.h"
 #include "menus.h"
+#include "interfaz.h"
 
-
+//Determina que funcion de batalla se empleará a partir del valor recibido (se supone que el valor es el que esta en el archivo de gimnasio)
 funcion_batalla determinar_funcion(size_t n){
     if(n==1)
         return funcion_batalla_1;
@@ -16,33 +17,64 @@ funcion_batalla determinar_funcion(size_t n){
         return funcion_batalla_5;
 }
 
+//Lee la primera linea del archivo de gimnasio y carga los datos al gimnasio pasado que ya esta en memoria.
+//Si la lectura es correcta devuelve true y si no lee la cantidad de parametros esperados devuelve false.
 bool leer_linea_gimnasio(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int cant_items_esperados){
+	if(!archivo_gimnasio || !un_gimnasio || cant_items_esperados<1){
+		printf(ROJO"Error en los parametros a la hora de leerla primera linea del archivo del gimnasio\n");
+		printf(NORMAL"");
+		return false;
+	}
     size_t reglas;
     int leidos = fscanf(archivo_gimnasio, FORMATO_LECTURA_GIMNASIO, un_gimnasio->nombre, &(un_gimnasio->dificultad), &reglas);
     un_gimnasio->reglas_de_batalla = determinar_funcion(reglas);
-    if(leidos != cant_items_esperados)
+    if(leidos != cant_items_esperados){
+        printf(ROJO"La cantidad de elementos leidos en la primera linea del archivo gimnasio no es la esperada\n");
+        printf(NORMAL"");
         return false;
+    }
     return true;
 }
 
+
+//Agrega un nuevo entrenador al gimnasio dado.
+//Si el gimnasio no tenia ningun entrenador crea la pila de entrenadores necesaria, de existir solo se apila.
 bool agregar_nuevo_entrenador(gimnasio_t* gimnasio, char nombre_entrenador[]){
+	if(!gimnasio){
+		printf(ROJO"El gimnasio no existe!! No se le puede agregar un entrenador\n");
+		printf(NORMAL"");
+		return false;
+	}
+
     entrenador_t* nuevo_entrenador = calloc(1, sizeof(entrenador_t));
-    if(!nuevo_entrenador)
+    if(!nuevo_entrenador){
         return false;
+    }
     
     strcpy(nuevo_entrenador->nombre, nombre_entrenador);
     
-    if(!gimnasio->entrenadores)
+    if(!gimnasio->entrenadores){
         gimnasio->entrenadores = lista_crear();
+    }
 
-    if(lista_apilar(gimnasio->entrenadores, nuevo_entrenador)==ERROR)
+    if(lista_apilar(gimnasio->entrenadores, nuevo_entrenador)==ERROR){
+    	printf(ROJO"Error al intentar apilar un nuevo entrenador al gimnasio\n");
+    	printf(NORMAL"");
         return false;
+    }
 
     return true;
 }
 
 
+//Lee la linea de entrenador del archivo de gimnasio y carga los datos al gimnasio pasado que ya esta en memoria.
+//Si la lectura es correcta devuelve true y si no lee la cantidad de parametros esperados devuelve false.
 bool leer_linea_entrenador(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int cant_items_esperados){
+	if(!archivo_gimnasio || !un_gimnasio || cant_items_esperados<1){
+		printf(ROJO"Error en los parametros a la hora de leer una linea del archivo del gimnasio\n");
+		printf(NORMAL"");
+		return false;
+	}
     char nombre_entrenador[MAX_NOMBRE];
     int leidos = fscanf(archivo_gimnasio, FORMATO_LECTURA_ENTRENADOR, nombre_entrenador);
     if(leidos != cant_items_esperados)
@@ -50,22 +82,39 @@ bool leer_linea_entrenador(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int 
     return agregar_nuevo_entrenador(un_gimnasio, nombre_entrenador);
 }
 
+
+//Agrega un nuevo pokemon al entrenador dado, devuelve true si pudo hacerlo o false en caso de error.
+//Si el entrenador no tenia ningun pokemon crea la lista necesaria para el equipo, de existir solo se encola.
 bool agregar_nuevo_pokemon(entrenador_t* entrenador, pokemon_t* pokemon){
-    if(!entrenador){
+    if(!entrenador || !pokemon){
+    	printf(ROJO"No se puede agregar un nuevo pokemon al entrenador porque este y/o el pokemon no existen\n");
+    	printf(NORMAL"");
         free(pokemon);
         return false;
     }
 
-    if(!entrenador->equipo)
+    if(!entrenador->equipo){
         entrenador->equipo = lista_crear();
+    }
 
     if(!entrenador->equipo){
+    	printf(ROJO"Error al crear la lista para el equipo del entrenador sin pokemones\n");
+    	printf(NORMAL"");
         free(pokemon);
         return false;
+    }
+
+    if(lista_elementos(entrenador->equipo)>=MAX_EQUIPO){
+    	printf(ROJO"No se le pueden colocar mas pokemones a este entrenador, su equipo esta lleno!!!\n Se intentará seguir con la carga saltando este pokemon\n");
+    	printf(NORMAL"");
+        free(pokemon);
+        return true;
     }
 
     if(lista_elementos(entrenador->equipo)<MAX_EQUIPO){
         if(lista_encolar(entrenador->equipo, pokemon)==ERROR){
+        	printf(ROJO"Error al tratar de insertar el nuevo pokemon al equipo del entrenador\n");
+    		printf(NORMAL"");
             free(pokemon);
             return false;
         }
@@ -74,11 +123,21 @@ bool agregar_nuevo_pokemon(entrenador_t* entrenador, pokemon_t* pokemon){
 }
 
 
-
+//Lee la linea de pokemon del archivo de gimnasio y carga los datos al gimnasio pasado que ya esta en memoria.
+//Si la lectura es correcta devuelve true y si no lee la cantidad de parametros esperados devuelve false.
 bool leer_linea_pokemon(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int cant_items_esperados){
+	if(!archivo_gimnasio || !un_gimnasio || cant_items_esperados<1){
+		printf(ROJO"Error en los parametros a la hora de leer una linea del archivo del gimnasio\n");
+		printf(NORMAL"");
+		return false;
+	}
     pokemon_t* nuevo_pkm = calloc(1, sizeof(pokemon_t));
     int leidos = fscanf(archivo_gimnasio, FORMATO_LECTURA_POKEMON, nuevo_pkm->nombre, nuevo_pkm->tipo, &(nuevo_pkm->velocidad), &(nuevo_pkm->ataque), &(nuevo_pkm->defensa));
     if(leidos != cant_items_esperados){
+        if(!feof(archivo_gimnasio)){
+            printf(ROJO"La cantidad de elementos leidos en la linea de pokemon del archivo gimnasio no es la esperada\n");
+            printf(NORMAL"");
+        }
         free(nuevo_pkm);
         return false;
     }
@@ -86,12 +145,17 @@ bool leer_linea_pokemon(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int can
 }
 
 
-
+//Carga la informacion del archivo gimnasio a un gimnasio en el heap (reserva la memoria necesario para ello)
+//Devuelve el puntero al gimnasio en memoria o NULL en caso de Error la reservar la memoria.
+//En caso de Error en la lectura del archivo se devolvera el gimnasio con la informacion cargada hasta donde se haya podido leer.
 gimnasio_t* leer_archivo_gimnasio(FILE* archivo_gimnasio){
 
     gimnasio_t* un_gimnasio = calloc(1, sizeof(gimnasio_t));
-    if(!un_gimnasio)
+    if(!un_gimnasio){
+        printf(ROJO"Error al reservar memoria para el gimnasio\n");
+        printf(NORMAL"");
         return NULL;
+    }
 
     bool todo_ok = true;
     char tipo_linea = GIMNASIO;
@@ -113,7 +177,7 @@ gimnasio_t* leer_archivo_gimnasio(FILE* archivo_gimnasio){
     return un_gimnasio;
 }
 
-
+/*
 void liberar_gimnasio(gimnasio_t* gimnasio){
     if(!gimnasio)
         return;
@@ -134,7 +198,11 @@ void liberar_gimnasio(gimnasio_t* gimnasio){
     }
     free(gimnasio);
 }
+*/
 
+
+//Carga la informacion del archivo gimnasio pasado a un gimnasio en el heap y lo inserta en el heap pasado.
+//En caso de Error en la lectura del archivo se insertará en el heap gimnasio con la informacion cargada hasta donde se haya podido leer.
 void cargar_gimnasio(heap_t* heap, char* direccion_gimasio){
     if(!heap ||!direccion_gimasio)
         return;
@@ -146,34 +214,23 @@ void cargar_gimnasio(heap_t* heap, char* direccion_gimasio){
     }
 
     gimnasio_t* nuevo_gimnasio = leer_archivo_gimnasio(archivo_gimnasio);
+    fclose(archivo_gimnasio);
 
     if(!nuevo_gimnasio){
         printf("Error al reservar memoria para el gimnasio\n");
-        fclose(archivo_gimnasio);
         return;
     }
 
     if(heap_insertar(heap, nuevo_gimnasio)==ERROR){
-        liberar_gimnasio(nuevo_gimnasio);
-        fclose(archivo_gimnasio);
+        destructor_gimnasios(nuevo_gimnasio);
         printf("Error al insertar el gimnasio en el HEAP\n");
         return;
     }
-    fclose(archivo_gimnasio);
+    
     return;
 }
 
-bool quiere_seguir_cargando(){
-    char respuesta;
-    printf("Quiere cargar otro gimnasio??\n Y/N : ");
-    scanf(" %c", &respuesta);
-    if(respuesta==SI)
-        return true;
-    if(respuesta==NO)
-        return false;
-    printf("Recurde solo ingresar uno de los carcateres indicados, en mayuscula\n");
-    return quiere_seguir_cargando();
-}
+
 
 void cargar_gimnasios(heap_t* gimnasios){
     
@@ -191,89 +248,93 @@ void cargar_gimnasios(heap_t* gimnasios){
 }
 
 
-void trasladar_primer_pokemon(lista_t* lista_original, lista_t* lista_nueva){
-    lista_encolar(lista_nueva, lista_primero(lista_original));
-    lista_desencolar(lista_original);
-}
-
-
-void restaurar_equipos(lista_t* lista_aux, lista_t* equipo){
-    while(!lista_vacia(lista_aux))
-        trasladar_primer_pokemon(lista_aux, equipo);
-}
-
+//Aumneta en uno el bonus del pokemon pasado, siempre y cuando no supere el maximo establecido.
 void actualizar_estadisticas_pokemon(pokemon_t* pokemon){
+	if(!pokemon){
+		printf(ROJO"NO existe el pokemon!! No se pueden actualizar sus estadísticas!!!\n");
+		printf(NORMAL"");
+		return;
+	}
     if(pokemon->bonus < MAX_BONUS){
        pokemon->bonus++;
     }
 }
 
-int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_batalla reglas_de_batalla, bool es_simulacion){
-    if(!equipo_jugador || !equipo_entrenador || !reglas_de_batalla)
-        return ERROR;
 
-    lista_t* lista_aux_jugador = lista_crear();
-    lista_t* lista_aux_entrenador = lista_crear();
+//Enfrenta al jugador con el entrenador y devuelve le resultado del encuentro.
+//Solo muestra salidas por pantalla si no es una simulacion.
+int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_batalla reglas_de_batalla, bool es_simulacion){
+    if(!equipo_jugador || !equipo_entrenador || !reglas_de_batalla){
+    	printf(ROJO"Error en los parametros a la hora de enfrentarse a un entrenador\n");
+		printf(NORMAL"");
+        return ERROR;
+    }
+
+    lista_iterador_t* iterador_equipo_jugador = lista_iterador_crear(equipo_jugador);
+    lista_iterador_t* iterador_equipo_entrenador = lista_iterador_crear(equipo_entrenador);
+
     int resultado_combate = 0;
     int resultado_duelo = 0;
 
-    while(!lista_vacia(equipo_jugador) && !lista_vacia(equipo_entrenador)){
+    while(lista_iterador_tiene_siguiente(iterador_equipo_jugador) && lista_iterador_tiene_siguiente(iterador_equipo_entrenador)){
         
-        resultado_combate = reglas_de_batalla(lista_primero(equipo_jugador), lista_primero(equipo_entrenador));
+        resultado_combate = reglas_de_batalla(lista_iterador_elemento_actual(iterador_equipo_jugador), lista_iterador_elemento_actual(iterador_equipo_entrenador));
         if(!es_simulacion)
-            menu_combate(lista_primero(equipo_jugador), lista_primero(equipo_entrenador), resultado_combate);
+            menu_combate(lista_iterador_elemento_actual(iterador_equipo_jugador), lista_iterador_elemento_actual(iterador_equipo_entrenador), resultado_combate);
         
         if(resultado_combate==GANO_PRIMERO){
-            actualizar_estadisticas_pokemon(lista_primero(equipo_jugador));
-            trasladar_primer_pokemon(equipo_entrenador, lista_aux_entrenador);
+            actualizar_estadisticas_pokemon(lista_iterador_elemento_actual(iterador_equipo_jugador));
+            lista_iterador_avanzar(iterador_equipo_entrenador);
         }else{
-            trasladar_primer_pokemon(equipo_jugador, lista_aux_jugador);
+            lista_iterador_avanzar(iterador_equipo_jugador);
         }
     }
 
-    if(lista_vacia(equipo_entrenador)){
+    if(lista_iterador_tiene_siguiente(iterador_equipo_jugador)){
         resultado_duelo = VICTORIA;
     }else{
         resultado_duelo = DERROTA;
     }
-
-    restaurar_equipos(equipo_jugador, lista_aux_jugador); // ESTO ES PARA MANTENER EL ORDEN ORIGINAL
-    restaurar_equipos(lista_aux_jugador, equipo_jugador);
-
-    restaurar_equipos(equipo_entrenador, lista_aux_entrenador); // ESTO ES PARA MANTENER EL ORDEN ORIGINAL
-    restaurar_equipos(lista_aux_entrenador, equipo_entrenador);
-
-    lista_destruir(lista_aux_jugador);
-    lista_destruir(lista_aux_entrenador);
+    
+    lista_iterador_destruir(iterador_equipo_jugador);
+    lista_iterador_destruir(iterador_equipo_entrenador);
     return resultado_duelo;
 }
 
 
-void trasladar_ultimo_entrenador(lista_t* pila_original, lista_t* pila_nueva){
-    lista_apilar(pila_nueva, lista_tope(pila_original));
-    lista_desapilar(pila_original);
+//
+bool eliminar_entrenador_tope(lista_t* entrenadores){
+	if(lista_elementos(entrenadores)>1){
+	    liberar_entrenador(lista_tope(entrenadores));
+	    lista_desapilar(entrenadores);
+	    return false;
+	}
+	return true;
 }
-
-
-void restaurar_gimnasio(lista_t* pila_aux, lista_t* entrenadores){
-    while(!lista_vacia(pila_aux))
-        trasladar_ultimo_entrenador(pila_aux, entrenadores);
-}
-
-
-
 
 int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simulacion){
     if(!jugador || !gimnasio){
+    	printf(ROJO"Error en los parametros a la hora de enfrentarse a un gimnasio\n");
+		printf(NORMAL"");
+        return ERROR;
+    }
+    if(!(gimnasio->entrenadores)){
+    	printf(ROJO"Error al enfrentarse a un gimnasio, NO TIENE PILA DE ENTRENADORES\n");
+		printf(NORMAL"");
+        return ERROR;
+    }
+    if(lista_vacia(gimnasio->entrenadores)){
+    	printf(ROJO"Error al enfrentarse a un gimnasio, LA PILA DE ENTRENADORES ESTA VACIA\n");
+		printf(NORMAL"");
         return ERROR;
     }
 
-    lista_t* pila_aux_entrenadores = lista_crear();
     bool fue_derrotado = false;
+    bool vencio_al_lider = false;
     int resultado_duelo = 0;
     entrenador_t* entrenador_actual = NULL;
 
-    while(!lista_vacia(gimnasio->entrenadores) && !fue_derrotado){
+    while(!vencio_al_lider && !fue_derrotado){
         
         entrenador_actual = lista_tope(gimnasio->entrenadores);
         
@@ -285,9 +346,10 @@ int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simul
         resultado_duelo = duelo_pokemon(jugador->equipo, entrenador_actual->equipo, gimnasio->reglas_de_batalla, es_simulacion);
 
         if(resultado_duelo==VICTORIA){
-            if(!es_simulacion)
+            if(!es_simulacion){
                 printf(VERDE"Venciste a %s\n", entrenador_actual->nombre);
-            trasladar_ultimo_entrenador(gimnasio->entrenadores, pila_aux_entrenadores);
+            }
+            vencio_al_lider = eliminar_entrenador_tope(gimnasio->entrenadores);
         }else{
             printf(ROJO"Fuiste derrotado por %s\n", entrenador_actual->nombre);
             fue_derrotado = true;
@@ -295,11 +357,10 @@ int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simul
         printf(NORMAL"");
     }
 
-    if(!fue_derrotado && !es_simulacion)
-        menu_victoria(jugador, lista_tope(pila_aux_entrenadores), false);
+    if(vencio_al_lider && !es_simulacion){
+        menu_victoria(jugador, lista_tope(gimnasio->entrenadores), false);
+    }
 
-    restaurar_gimnasio(pila_aux_entrenadores, gimnasio->entrenadores);
-    lista_destruir(pila_aux_entrenadores);
 
     if(fue_derrotado && !es_simulacion){
         if(menu_derrota(jugador)==REINTENTAR)
@@ -307,7 +368,8 @@ int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simul
     }
     
 
-    if(fue_derrotado)
+    if(fue_derrotado){
         return DERROTA;
+    }
     return VICTORIA;
 }

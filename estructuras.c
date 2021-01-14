@@ -2,10 +2,14 @@
 
 
 int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2){
-    if(((gimnasio_t*)gimnasio_1)->dificultad < ((gimnasio_t*)gimnasio_2)->dificultad)
+    if(!gimnasio_1 || !gimnasio_2)
+        return ERROR;
+
+    if(((gimnasio_t*)gimnasio_1)->dificultad < ((gimnasio_t*)gimnasio_2)->dificultad){
         return MENOR;
-    else
+    }else{
         return MAYOR;
+    }
 }
 
 

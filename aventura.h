@@ -3,9 +3,19 @@
 
 #include "estructuras.h"
 
+/*
+ *Juega una partida con todos los Menus y salidas por pantalla disponibles.
+ */
 void jugar(personaje_t* jugador, heap_t* gimnasios);
+
+/*
+ *Juega una partida sin los Menus hasta perder en alguna batalla o ganar toda la liga.
+ */
 void simular(personaje_t* jugador, heap_t* gimnasios);
-void destructor_gimnasios(void* gimnasio);
-int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2);
+
+/*
+ *Crea las estructuras necesarias para la partida.
+ */
+int crear_estructuras(heap_t** gimnasios, personaje_t** jugador);
 
 #endif /* __AVENTURA_H__ */

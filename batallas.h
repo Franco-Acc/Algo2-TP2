@@ -12,14 +12,30 @@
  * No habran empates.
  */
 
+/*
+ *El primer pokemon gana cuando es del mismo tipo o del 'ventajoso' respecto a su oponente, en caso de ser
+ *cualquier otro caso gana el segundo.
+ */
 int funcion_batalla_1(void* pkm_1, void* pkm_2);
 
+/*
+ *El primer pokemon gana cuando iguala o supera en velocidad al segundo. En casa contrario gana el segundo.
+ */
 int funcion_batalla_2(void* pkm_1, void* pkm_2);
 
+/*
+ *El primer pokemon gana cuando iguala o supera en defensa al segundo. En casa contrario gana el segundo (Pelea de metapods!!).
+ */
 int funcion_batalla_3(void* pkm_1, void* pkm_2);
 
+/*
+ *El primer pokemon gana cuando iguala o supera en ataque al segundo. En casa contrario gana el segundo.
+ */
 int funcion_batalla_4(void* pkm_1, void* pkm_2);
 
+/*
+ *El primer pokemon gana cuando el largo de su nombre es igual o superior al nombre del segundo. En casa contrario gana el segundo.
+ */
 int funcion_batalla_5(void* pkm_1, void* pkm_2);
 
 

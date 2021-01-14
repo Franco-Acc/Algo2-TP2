@@ -52,6 +52,7 @@ bool heap_vacio(heap_t* heap);
  */
 void* heap_extraer_minimal(heap_t* heap);
 
+//Libera la memoria reservada para el heap, aplicando el destructor a todos los elementos que contiene en caso de tenerlo.
 void heap_destruir(heap_t* heap);
 
 #endif /* __HEAP_H__ */

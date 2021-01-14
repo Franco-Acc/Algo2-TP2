@@ -119,9 +119,10 @@ void heap_destruir(heap_t* heap){
 	if(!heap)
 		return;
 
-	if(heap->destructor)
+	if(heap->destructor){
 		for(int i=0; i < heap->tope ;i++)
 			heap->destructor(heap->vector[i]);
+	}
 		
 	free(heap->vector);
 	free(heap);

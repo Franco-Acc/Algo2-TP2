@@ -110,17 +110,36 @@ typedef struct personaje{
     lista_t* capturados;
 } personaje_t;
 
-void liberar_jugador(personaje_t* jugador);
+
+//Libera la memoria reservada para un pokemon.
 void liberar_pokemon (pokemon_t* pokemon);
+
+//Libera la memoria reservada para todo el equipo (incluyendo los pokemones que contiene).
 void liberar_equipo(lista_t* equipo);
+
+//Libera la memoria reservada para el jugador (incluyendo su equipo y capturados).
+void liberar_jugador(personaje_t* jugador);
+
+//Libera la memoria reservada para el entrenador (incluyendo su equipo).
 void liberar_entrenador(entrenador_t* entrenador);
+
+//Libera la memoria reservada para todos los entrenadores de la lista (incluyendo la lista en si).
 void liberar_entrenadores(lista_t* entrenadores);
+
+//Libera la memoria reservada para un gimnasio (incluyendo todos sus entrenadores).
+void destructor_gimnasios(void* gimnasio);
+
+//Libera la memoria reservada para todos gimnasios del juego (incluyendo todos sus entrenadores)
 void liberar_gimnasios(heap_t* gimnasios);
 
-void destructor_gimnasios(void* gimnasio);
+//Compara 2 gimnasios segun su dificultad, devuelve MAYOR si el primero es mayor o igual al segundo,
+//MENOR si el primero es menor al segundo o ERROR si falta alguno de los gimnasios.
 int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2);
 
+//Lee la primera letra de la linea del archivo pasado, colocando dicha letra en la variable pasada por referencia.
 void leer_primera_letra_de_linea(FILE* archivo_gimnasio, char* letra);
+
+//Pide al usuario la direccion de un archivo y la almacena en la variable pasada.
 void pedir_direccion(char* direccion);
 
 

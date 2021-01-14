@@ -6,6 +6,11 @@
 
 
 void menu_combate(pokemon_t* pokemon_jugador, pokemon_t* pokemon_entrenador, int resultado_combate){
+    if(!pokemon_jugador || !pokemon_entrenador){
+        printf(ROJO"Falta uno de los pokemones para el enfrentamiento\n");
+        printf(NORMAL"");
+        return;
+    }
     printf(AMARILLO"\t\tCombate Pokemon!!\n");
     printf(NORMAL"Tu pokemon \t\t\t Pokemon del rival \n");
     printf("%-32s %-32s\n", pokemon_jugador->nombre, pokemon_entrenador->nombre);
@@ -23,9 +28,18 @@ void menu_combate(pokemon_t* pokemon_jugador, pokemon_t* pokemon_entrenador, int
 
 
 
-
+/*Añade el pokemon dado al equipo.
+ *Si no hay espacio en el equipo se le pedira al usuario por qué pokemon presente desea reemplazarlo, enviendo al reemplazado a la lista de capturados.
+ *Si hay espacio en el equipo, el pokemon es agregado al final de la lista. 
+*/
 void aniadir_pokemon_al_equipo(personaje_t* jugador, pokemon_t* pokemon_lider, size_t posicion_a_ocupar){
     
+    if(!jugador || !pokemon_lider){
+        printf(ROJO"Falta el jugador y/o el pokemon del lider\n");
+        printf(NORMAL"");
+        return;
+    }
+
     pokemon_t* nuevo_pkm = calloc(1, sizeof(pokemon_t));
     if(!nuevo_pkm){
         printf("Error al reservar memoria para el nuevo pokemon del equipo\n");
@@ -63,6 +77,11 @@ void aniadir_pokemon_al_equipo(personaje_t* jugador, pokemon_t* pokemon_lider, s
     }
 }
 
+
+/*Copia un pokemon del lider y lo agrega al equipo.
+ *Si no hay espacio en el equipo se le pedira al usuario por qué pokemon presente desea reemplazarlo, enviendo al reemplazado a la lista de capturados.
+ *Si hay espacio en el equipo, el pokemon es agregado al final de la lista. 
+*/
 void tomar_prestado(personaje_t* jugador, entrenador_t* lider, bool* ya_robo){
     bool es_lo_esperado = false;
     int posicion = -1;
@@ -100,11 +119,16 @@ void tomar_prestado(personaje_t* jugador, entrenador_t* lider, bool* ya_robo){
     }
 }
 
+//Elimina el pokemon en la posicion dada de la lista, liberando la memoria reservada para el mismo.
 void eliminar_pokemon_en_posicion(lista_t* pokemones, size_t posicion){
      liberar_pokemon(lista_elemento_en_posicion(pokemones, posicion));
      lista_borrar_de_posicion(pokemones, posicion);
 }
 
+
+/*Permite intercambiar un pokemon del equipo por uno en la caja.
+ *Si el usuario se rrepinte del cambio en durante la operacion puede cancelarla
+ */
 void cambiar_equipo(personaje_t* jugador){
     bool es_lo_esperado = false;
     int posicion = -1;

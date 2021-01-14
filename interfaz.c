@@ -140,7 +140,17 @@ bool pedir_confirmacion(){
 }
 
 
-
+bool quiere_seguir_cargando(){
+    char respuesta;
+    printf("Quiere cargar otro gimnasio??\n Y/N : ");
+    scanf(" %c", &respuesta);
+    if(respuesta==SI)
+        return true;
+    if(respuesta==NO)
+        return false;
+    printf("Recurde solo ingresar uno de los carcateres indicados, en mayuscula\n");
+    return quiere_seguir_cargando();
+}
 
 
 void mostrar_opciones_menu_derrota(){
