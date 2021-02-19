@@ -3,6 +3,36 @@
 
 #include "estructuras.h"
 
+//Mensaje de error al intentar añadir medalla.
+void imp_err_aniadir_medalla();
+//Mensaje de error al reservar memoria para las estructuras del programa.
+void imp_err_crear_estructuras();
+
+
+//Mensaje de bienvenida al iniciar la estructura
+void imp_msj_bienvenida();
+//Mensaje de siguiente gimnasio con el que se tendrá que enfrentar el jugador.
+void imp_sig_gim_a_enfrentar(char* nombre, bool es_simulacion);
+//Mensaje de se ha ganado una nueva medalla
+void imp_medalla_obtenida(char* nombre, bool es_simulacion);
+//Mensaje de rendicion y final del juego.
+void imp_msj_finalizacion_por_rendicion(char* nombre);
+//Mensaje de final del juego debido a un error.
+void imp_msj_finalizacion_por_error()
+//Mensaje de Victoria al ganar todos los gimnasios y terminar el juego
+void imp_msj_finalizacion_por_victoria(size_t medallas_ganadas);
+
+
+
+
+
+
+
+
+
+
+
+
 //Muestra los comandos disponibles para el usuario en el menu de gimnasios.
 void mostrar_opciones_menu_gimnasio();
 

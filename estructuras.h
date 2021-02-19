@@ -6,7 +6,6 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "batallas.h"
 #include "lista.h"
 #include "heap.h"
 
@@ -25,10 +24,10 @@
 #define ERROR -1
 
 #define VICTORIA 1
-#define DERROTA -1
+#define DERROTA 2
 
 #define GANO_PRIMERO 1
-#define GANO_SEGUNDO -1
+#define GANO_SEGUNDO 2
 
 #define SI 'Y'
 #define NO 'N'

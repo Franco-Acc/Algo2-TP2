@@ -1,5 +1,71 @@
 #include "interfaz.h"
 
+
+
+//Mensaje de error al intentar añadir medalla.
+void imp_err_aniadir_medalla(){
+	printf(ROJO"No existe el jugador, no se puede aniadir medalla!!\n");
+    printf(NORMAL"");
+}
+
+//Mensaje de error al reservar memoria para las estructuras del programa.
+void imp_err_crear_estructuras(){
+	printf("Error en la reserva de memoria para el heap de gimnasios\n");
+}
+
+
+
+
+//Mensaje de bienvenida al iniciar la estructura
+void imp_msj_bienvenida(){
+	printf("Bienvenidos a la gran aventura pokemon!!\n");
+}
+
+//Mensaje de siguiente gimnasio con el que se tendrá que enfrentar el jugador.
+void imp_msj_sig_gim_a_enfrentar(char* nombre, bool es_simulacion){
+	if(!es_simulacion){
+		system("clear");
+		printf("\nAhora te enfrentaras al %s\n", nombre);
+	}
+}
+
+//Mensaje de se ha ganado una nueva medalla
+void imp_msj_medalla_obtenida(char* nombre, bool es_simulacion){
+	if(!es_simulacion)
+		printf(VERDE"\nHas obtenido la medalla de %s\n", nombre);
+}
+
+//Mensaje de rendicion y final del juego.
+void imp_msj_finalizacion_por_rendicion(char* nombre){
+	printf(AMARILLO"\nHas sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", nombre);
+}
+
+//Mensaje de final del juego debido a un error.
+void imp_msj_finalizacion_por_error(){
+	printf(ROJO"Debido al error tu aventura tendrá que posponerse...\n");
+}
+
+//Mensaje de Victoria al ganar todos los gimnasios y terminar el juego
+void imp_msj_finalizacion_por_victoria(size_t medallas_ganadas){
+	printf(VERDE"Felicidades, has recolectado las %u medallas de gimnasio y ganado la Liga Pokemon!!\n", medallas_ganadas);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void imprimir_pokemon(pokemon_t* pokemon){
     if(!pokemon){
         printf("No se selecciono un pokemon\n");

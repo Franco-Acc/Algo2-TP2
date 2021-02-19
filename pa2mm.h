@@ -4,12 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include "estructuras.h"
 
 #define BLANCO "\x1B[37;1m"
-#define VERDE "\x1B[32;1m"
-#define ROJO "\x1B[31;1m"
-#define AMARILLO "\x1B[33;1m"
-#define NORMAL "\x1B[0m"
+//#define VERDE "\x1B[32;1m"
+//#define ROJO "\x1B[31;1m"
+//#define AMARILLO "\x1B[33;1m"
+//#define NORMAL "\x1B[0m"
 
 #define TILDE "✓"
 #define CRUZ "✗"

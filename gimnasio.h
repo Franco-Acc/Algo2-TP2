@@ -3,6 +3,12 @@
 
 #include "estructuras.h"
 
+/*
+ *Carga la informacion del archivo a un gimnasio y lo inserta en el heap.
+ *En caso de Error en la lectura del archivo se insertará en el heap el gimnasio con la informacion cargada hasta donde se haya podido leer.
+*/
+void cargar_gimnasio(heap_t* heap, char* direccion_gimasio);
+
 
 /*
  *Carga los gimnasios necesarios para la partida, para hacerlo pedirá la direccion del archivo al ususario.

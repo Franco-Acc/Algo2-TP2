@@ -29,6 +29,8 @@ void liberar_equipo(lista_t* equipo){
 
 
 void liberar_jugador(personaje_t* jugador){
+	if(!jugador)
+		return;
     liberar_equipo(jugador->equipo);
     liberar_equipo(jugador->capturados);
     free(jugador);
@@ -36,6 +38,8 @@ void liberar_jugador(personaje_t* jugador){
 
 
 void liberar_entrenador(entrenador_t* entrenador){
+	if(!entrenador)
+		return;
     liberar_equipo(entrenador->equipo);
     free(entrenador);
 }
@@ -51,6 +55,8 @@ void liberar_entrenadores(lista_t* entrenadores){
 
 
 void destructor_gimnasios(void* gimnasio){
+	if(!gimnasio)
+		return;
     liberar_entrenadores(((gimnasio_t*)gimnasio)->entrenadores);
     free(gimnasio);
 }
@@ -67,10 +73,14 @@ void liberar_gimnasios(heap_t* gimnasios){
 
 
 void leer_primera_letra_de_linea(FILE* archivo_gimnasio, char* letra){
+	if(!archivo_gimnasio || !letra)
+		return;
     fscanf(archivo_gimnasio, FORMATO_LECTURA_PRIMERA_LETRA, letra);
 }
 
 void pedir_direccion(char* direccion){
+	if(!direccion)
+		return;
     printf("\n Ingrese la direccion del archivo: ");
     scanf("%199s", direccion);
 }

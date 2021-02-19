@@ -5,6 +5,8 @@
 #define OK	   0;
 
 void swap(void* vector[], size_t pos_1, size_t pos_2){
+	if(!vector)
+		return;
 	void* puntero_aux = vector[pos_1];
 	vector[pos_1] = vector[pos_2];
 	vector[pos_2] = puntero_aux;
@@ -23,7 +25,7 @@ size_t posicion_hijo_derecho(size_t n){
 }
 
 void sift_up(heap_t* heap, size_t n){
-	if(n==0)
+	if((!heap) || (n==0))
 		return;
 	size_t pos_padre = posicion_padre(n);
 	if(heap->comparador(heap->vector[n], heap->vector[pos_padre])<0){
@@ -33,7 +35,9 @@ void sift_up(heap_t* heap, size_t n){
 }
 
 void sift_down(heap_t* heap, size_t n){
-	if(n >= heap->tope)
+	if(!heap)
+		return;
+	if(n >= (heap->tope))
 		return;
 	
 	size_t pos_hijo_izq = posicion_hijo_izquierdo(n);

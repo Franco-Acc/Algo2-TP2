@@ -1,5 +1,6 @@
 
 #include "gimnasio.h"
+#include "batallas.h"
 #include "menus.h"
 #include "interfaz.h"
 
@@ -276,7 +277,7 @@ int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_b
     int resultado_combate = 0;
     int resultado_duelo = 0;
 
-    while(lista_iterador_tiene_siguiente(iterador_equipo_jugador) && lista_iterador_tiene_siguiente(iterador_equipo_entrenador)){
+    while(lista_iterador_tiene_siguiente(iterador_equipo_jugador) && lista_iterador_tiene_siguiente(iterador_equipo_entrenador) && resultado_combate!=ERROR){
         
         resultado_combate = reglas_de_batalla(lista_iterador_elemento_actual(iterador_equipo_jugador), lista_iterador_elemento_actual(iterador_equipo_entrenador));
         if(!es_simulacion)
@@ -285,7 +286,7 @@ int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_b
         if(resultado_combate==GANO_PRIMERO){
             actualizar_estadisticas_pokemon(lista_iterador_elemento_actual(iterador_equipo_jugador));
             lista_iterador_avanzar(iterador_equipo_entrenador);
-        }else{
+        }else if(resultado_combate==GANO_SEGUNDO){
             lista_iterador_avanzar(iterador_equipo_jugador);
         }
     }
@@ -298,6 +299,9 @@ int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_b
     
     lista_iterador_destruir(iterador_equipo_jugador);
     lista_iterador_destruir(iterador_equipo_entrenador);
+    
+    if(resultado_combate==ERROR)
+    	return ERROR;
     return resultado_duelo;
 }
 
@@ -350,12 +354,17 @@ int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simul
                 printf(VERDE"Venciste a %s\n", entrenador_actual->nombre);
             }
             vencio_al_lider = eliminar_entrenador_tope(gimnasio->entrenadores);
-        }else{
+        }else if(resultado_duelo==DERROTA){
             printf(ROJO"Fuiste derrotado por %s\n", entrenador_actual->nombre);
             fue_derrotado = true;
+        }else{
+        	printf(ROJO"Ha ocurrido un error durante uno de los combates, el duelo queda suspendido.\n");
+        	printf(NORMAL"");
+        	return ERROR;
         }
         printf(NORMAL"");
     }
+
 
     if(vencio_al_lider && !es_simulacion){
         menu_victoria(jugador, lista_tope(gimnasio->entrenadores), false);
