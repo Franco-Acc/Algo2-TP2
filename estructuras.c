@@ -78,9 +78,3 @@ void leer_primera_letra_de_linea(FILE* archivo_gimnasio, char* letra){
     fscanf(archivo_gimnasio, FORMATO_LECTURA_PRIMERA_LETRA, letra);
 }
 
-void pedir_direccion(char* direccion){
-	if(!direccion)
-		return;
-    printf("\n Ingrese la direccion del archivo: ");
-    scanf("%199s", direccion);
-}

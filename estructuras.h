@@ -138,8 +138,5 @@ int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2);
 //Lee la primera letra de la linea del archivo pasado, colocando dicha letra en la variable pasada por referencia.
 void leer_primera_letra_de_linea(FILE* archivo_gimnasio, char* letra);
 
-//Pide al usuario la direccion de un archivo y la almacena en la variable pasada.
-void pedir_direccion(char* direccion);
-
 
 #endif /* __ESTRUCTURAS_H__ */
