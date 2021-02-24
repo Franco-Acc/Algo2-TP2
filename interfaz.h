@@ -11,40 +11,79 @@ void imp_err_abrir_archivo();
 void imp_err_crear_estructuras();
 //Mensaje de error al fallar la creacion de una lista.
 void imp_err_crear_lista();
+//Mensaje de error al fallar la creacion de un iterador externo de lista.
+void imp_err_crear_iterador_lista();
 //Mensaje de error al fallar la reserva de memoria para un nuevo pokemon.
 void imp_err_reserva_de_memoria_pkmn();
+//Mensaje de error al fallar la reserva de memoria para un nuevo entrenador.
+void imp_err_reserva_de_memoria_entrenador();
 //Mensaje de error al fallar la reserva de memoria para el personaje principal.
 void imp_err_reserva_de_memoria_personaje();
+//Mensaje de error al fallar la reserva de memoria para el gimnasio.
+void imp_err_reserva_de_memoria_gimnasio();
 
+
+
+//Mensaje de error al faltar uno de los argumentos necesarios para enfrentar un gimnasio.
+void imp_err_falta_argumento_en_enfrentar_gimnasio();
 //Mensaje de error al faltar uno de los argumentos necesarios para la batalla entre pokemnones.
 void imp_err_falta_argumento_en_enfrentamiento();
+//Mensaje de error al faltar uno de los argumentos necesarios para el duelo entre entrenadores pokemon.
+void imp_err_falta_argumento_en_duelo();
 //Mensaje de error al faltar uno de los argumentos necesarios para aniadir un pokemon al equipo.
 void imp_err_falta_argumento_en_aniadir_pkm();
-//Mensaje de error al faltar uno de los argumentos necesarios para leer la primera linea del archivo del personaje.
+//Mensaje de error al faltar uno de los argumentos necesarios para leer una linea de pokemon del archivo.
+void imp_err_falta_argumento_en_leer_linea_pkm();
+//Mensaje de error al faltar uno de los argumentos necesarios para leer una linea de entrenador del archivo.
+void imp_err_falta_argumento_en_leer_linea_entrenador();
+//Mensaje de error al faltar uno de los argumentos necesarios para leer una linea del archivo del personaje.
 void imp_err_falta_argumento_en_leer_linea_personaje();
-//Mensaje de error al faltar uno de los argumentos necesarios para leer la primera linea del archivo del personaje.
-void imp_err_falta_argumento_en_leer_linea_personaje();
+//Mensaje de error al faltar uno de los argumentos necesarios para leer una linea del archivo del gimnasio.
+void imp_err_falta_argumento_en_leer_linea_gimnasio();
 //Mensaje de error al faltar uno de los argumentos necesarios para agregar un nuevo pokemon al personaje.
 void imp_err_falta_argumento_en_agregar_pokemon();
 
 
+
+//Mensaje de error al fallar la insercion del entrenador a la pila.
+void imp_err_insertar_gimnasio();
+//Mensaje de error al fallar la insercion del entrenador a la pila.
+void imp_err_insertar_entrenador();
 //Mensaje de error al fallar la insercion del pokemon al equipo.
 void imp_err_insertar_pkmn();
 //Mensaje de error al fallar la extraccion del pokemon del equipo.
 void imp_err_extraer_pkmn();
 //Mensaje de error al fallar el traslado del pokemon en el equipo a capturados.
 void imp_err_trasladar_pkmn();
+//Mensaje de error al fallar la insercion del pokemon porque el equipo del entrenador estaba lleno.
+void imp_err_equipo_lleno();
 
+
+
+
+//Mensaje de error cuando no hay pokemon
+void imp_err_falta_pokemon();
 //Mensaje de error cuando no hay jugador
 void imp_err_falta_jugador();
 //Mensaje de error cuando no hay gimnasios
-void imp_err_falta_jugador();
+void imp_err_falta_gimnasio();
 //Mensaje de error cuando no se han cargados los datos necesarios para jugar el juego y tratan de iniciarse.
 void imp_err_faltan_elementos_para_iniciar();
-//Mensaje de error cuando la cantidad de elementos leidos en la primera linea del archivo de personaje no es la esperada
-void imp_err_cant_items_lectura_primera_linea_personaje();
-//Mensaje de error cuando la cantidad de elementos leidos en la linea de un pokemon del archivo de personaje no es la esperada
-void imp_err_cant_items_lectura_linea_pokemon_personaje();
+
+
+//Mensaje de error cuando la cantidad de elementos leidos en la linea con los datos del jugador del archivo de personaje no es la esperada.
+void imp_err_cant_items_lectura_linea_personaje();
+//Mensaje de error cuando la cantidad de elementos leidos en la inea con los datos del gimnasio del archivo de gimnasio no es la esperada.
+void imp_err_cant_items_lectura_linea_gimnasio();
+//Mensaje de error cuando la cantidad de elementos leidos en la linea de un entrenador del archivo no es la esperada.
+void imp_err_cant_items_lectura_linea_entrenador();
+//Mensaje de error cuando la cantidad de elementos leidos en la linea de un pokemon del archivo de gimnasio no es la esperada.
+void imp_err_cant_items_lectura_linea_pokemon();
+//Mensaje de error cuando falla en algun punto la lectura del archivo personaje.
+void imp_err_lectura_archivo_personaje();
+//Mensaje de error cuando falla en algun punto la lectura del archivo gimnasio.
+void imp_err_lectura_archivo_gimnasio();
+
 
 
 
@@ -57,8 +96,17 @@ void imp_err_cant_items_lectura_linea_pokemon_personaje();
 void imp_msj_bienvenida();
 //Mensaje de siguiente gimnasio con el que se tendrá que enfrentar el jugador.
 void imp_sig_gim_a_enfrentar(char* nombre, bool es_simulacion);
+//Mensaje de siguiente entrenador con el que se tendrá que enfrentar el jugador.
+void imp_sig_entrenador_a_enfrentar(char* nombre, bool es_simulacion);
 //Mensaje de se ha ganado una nueva medalla
 void imp_medalla_obtenida(char* nombre, bool es_simulacion);
+//Mensaje de se ha ganado contra un entrenador
+void imp_entrenador_vencido(char* nombre, bool es_simulacion);
+//Mensaje de se ha perdido contra un entrenador
+void imp_entrenador_me_vencio(char* nombre);
+//Mensaje de ha ocurrido un error durante el duelo contra otro entrenador
+void imp_error_en_duelo();
+
 //Mensaje de rendicion y final del juego.
 void imp_msj_finalizacion_por_rendicion(char* nombre);
 //Mensaje de final del juego debido a un error.
@@ -77,6 +125,8 @@ void imp_msj_pkm_seleccionado();
 void imp_msj_transferencia_exitosa();
 //Mensaje de introduccion a la carga del personaje
 void imp_msj_intro_carga_personaje();
+//Mensaje de introduccion a la carga del gimnasio
+void imp_msj_intro_carga_gimnasio();
 
 
 

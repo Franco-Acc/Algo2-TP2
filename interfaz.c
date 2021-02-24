@@ -10,7 +10,7 @@ void imp_err_aniadir_medalla(){
 
 //Mensaje de error al intentar abrir el archivo.
 void imp_err_abrir_archivo(){
-     printf(ROJO"Error al abrir el archivo de personaje seleccionado\n");
+     printf(ROJO"Error al abrir el archivo seleccionado\n");
      printf(NORMAL"");
 }
 
@@ -26,9 +26,31 @@ void imp_err_crear_lista(){
     printf(NORMAL"");
 }
 
+//Mensaje de error al fallar la creacion de un iterador externo de lista.
+void imp_err_crear_iterador_lista(){
+    printf(ROJO"Error al crear Iterador Externo de lista\n");
+    printf(NORMAL"");
+}
+
+
+
+
+
+//Mensaje de error al faltar uno de los argumentos necesarios para enfrentar un gimnasio.
+void imp_err_falta_argumento_en_enfrentar_gimnasio(){
+    printf(ROJO"Error en los parametros a la hora de enfrentarse a un gimnasio\n");
+    printf(NORMAL"");
+}
+
 //Mensaje de error al faltar uno de los argumentos necesarios para la batalla entre pokemnones.
 void imp_err_falta_argumento_en_enfrentamiento(){
     printf(ROJO"Falta uno de los pokemones para el enfrentamiento\n");
+    printf(NORMAL"");
+}
+
+//Mensaje de error al faltar uno de los argumentos necesarios para el duelo entre entrenadores pokemon.
+void imp_err_falta_argumento_en_duelo(){
+    printf(ROJO"Falta/n argumnetos para el duelo pokemon\n");
     printf(NORMAL"");
 }
 
@@ -38,17 +60,37 @@ void imp_err_falta_argumento_en_aniadir_pkm(){
     printf(NORMAL"");
 }
 
-//Mensaje de error al faltar uno de los argumentos necesarios para leer la primera linea del archivo del personaje.
+//Mensaje de error al faltar uno de los argumentos necesarios para leer una linea de pokemon del archivo.
+void imp_err_falta_argumento_en_leer_linea_pkm(){
+    printf(ROJO"Error en los parametros a la hora de leer una linea de pokemon del archivo\n");
+    printf(NORMAL"");
+}
+
+//Mensaje de error al faltar uno de los argumentos necesarios para leer una linea de entrenador del archivo.
+void imp_err_falta_argumento_en_leer_linea_entrenador(){
+    printf(ROJO"Error en los parametros a la hora de leer una linea de entrenador del archivo\n");
+    printf(NORMAL"");
+}
+
+//Mensaje de error al faltar uno de los argumentos necesarios para leer una linea del archivo del personaje.
 void imp_err_falta_argumento_en_leer_linea_personaje(){
     printf(ROJO"Error en los parametros a la hora de leer una linea del archivo del personaje\n");
     printf(NORMAL"");
 }
 
-//Mensaje de error al faltar uno de los argumentos necesarios para agregar un nuevo pokemon al personaje.
-void imp_err_falta_argumento_en_agregar_pokemon(){
-    printf(ROJO"No se puede agregar un nuevo pokemon al jugador porque este y/o el pokemon no existen\n");
+//Mensaje de error al faltar uno de los argumentos necesarios para leer una linea del archivo del gimnasio.
+void imp_err_falta_argumento_en_leer_linea_gimnasio(){
+    printf(ROJO"Error en los parametros a la hora de leer una linea del archivo del gimnasio\n");
     printf(NORMAL"");
 }
+
+//Mensaje de error al faltar uno de los argumentos necesarios para agregar un nuevo pokemon al personaje.
+void imp_err_falta_argumento_en_agregar_pokemon(){
+    printf(ROJO"No se puede agregar un nuevo pokemon al jugador/entrenador porque este y/o el pokemon no existen\n");
+    printf(NORMAL"");
+}
+
+
 
 
 //Mensaje de error al fallar la reserva de memoria para un nuevo pokemon.
@@ -57,9 +99,38 @@ void imp_err_reserva_de_memoria_pkmn(){
     printf(NORMAL"");
 }
 
+//Mensaje de error al fallar la reserva de memoria para un nuevo entrenador.
+void imp_err_reserva_de_memoria_entrenador(){
+    printf(ROJO"Error al reservar memoria para el nuevo entrenador\n");
+    printf(NORMAL"");
+}
+
 //Mensaje de error al fallar la reserva de memoria para el personaje principal.
 void imp_err_reserva_de_memoria_personaje(){
     printf(ROJO"Error al reservar memoria para el personaje principal\n");
+    printf(NORMAL"");
+}
+
+//Mensaje de error al fallar la reserva de memoria para el gimnasio.
+void imp_err_reserva_de_memoria_gimnasio(){
+    printf(ROJO"Error al reservar memoria para el gimnasio\n");
+    printf(NORMAL"");
+}
+
+
+
+
+
+
+//Mensaje de error al fallar la insercion del entrenador a la pila.
+void imp_err_insertar_gimnasio(){
+    printf(ROJO"Error al intentar insertar un nuevo gimnasio en el HEAP\n");
+    printf(NORMAL"");
+}
+
+//Mensaje de error al fallar la insercion del entrenador al gimnasio.
+void imp_err_insertar_entrenador(){
+    printf(ROJO"Error al intentar apilar un nuevo entrenador al gimnasio\n");
     printf(NORMAL"");
 }
 
@@ -81,6 +152,23 @@ void imp_err_trasladar_pkmn(){
      printf(NORMAL"");
 }
 
+//Mensaje de error al fallar la insercion del pokemon porque el equipo del entrenador estaba lleno.
+void imp_err_equipo_lleno(){
+    printf(ROJO"No se le pueden colocar mas pokemones a este entrenador, su equipo esta lleno!!!\n Se intentará seguir con la carga saltando este pokemon\n");
+    printf(NORMAL"");
+}
+
+
+
+
+
+
+
+//Mensaje de error cuando no hay pokemon
+void imp_err_falta_pokemon(){
+    printf(ROJO"No hay pokemon\n");
+    printf(NORMAL"");
+}
 
 //Mensaje de error cuando no hay jugador
 void imp_err_falta_jugador(){
@@ -90,7 +178,7 @@ void imp_err_falta_jugador(){
 
 //Mensaje de error cuando no hay gimnasios
 void imp_err_falta_gimnasio(){
-    printf(ROJO"No hay gimnaios\n");
+    printf(ROJO"No hay gimnasio/s\n");
     printf(NORMAL"");
 }
 
@@ -100,17 +188,45 @@ void imp_err_faltan_elementos_para_iniciar(){
     printf(NORMAL"");
 }
 
-//Mensaje de error cuando la cantidad de elementos leidos en la primera linea del archivo de personaje no es la esperada
-void imp_err_cant_items_lectura_primera_linea_personaje(){
-    printf(ROJO"La cantidad de elementos leidos en la primera linea del archivo personaje no es la esperada\n");
+
+
+
+
+//Mensaje de error cuando la cantidad de elementos leidos en la linea con los datos del jugador del archivo de personaje no es la esperada.
+void imp_err_cant_items_lectura_linea_personaje(){
+    printf(ROJO"La cantidad de elementos leidos en la linea con la informacion del personaje no es la esperada\n");
+    printf(NORMAL"");
+}
+//Mensaje de error cuando la cantidad de elementos leidos en la inea con los datos del gimnasio del archivo de gimnasio no es la esperada.
+void imp_err_cant_items_lectura_linea_gimnasio(){
+    printf(ROJO"La cantidad de elementos leidos en la linea con la informacion del gimnasio no es la esperada\n");
+    printf(NORMAL"");
+}
+//Mensaje de error cuando la cantidad de elementos leidos en la linea de un entrenador del archivo no es la esperada.
+void imp_err_cant_items_lectura_linea_entrenador(){
+    printf(ROJO"La cantidad de elementos leidos en la linea de un entrenador del archivo no es la esperada\n");
+    printf(NORMAL"");
+}
+//Mensaje de error cuando la cantidad de elementos leidos en la linea de un pokemon del archivo de gimnasio no es la esperada.
+void imp_err_cant_items_lectura_linea_pokemon(){
+    printf(ROJO"La cantidad de elementos leidos en la linea de un pokemon del archivo no es la esperada\n");
+    printf(NORMAL"");
+}
+//Mensaje de error cuando falla en algun punto la lectura del archivo personaje.
+void imp_err_lectura_archivo_personaje(){
+    printf(ROJO"Error en los parametros a la hora de leer una linea del archivo del personaje\n");
+    printf(NORMAL"");
+}
+//Mensaje de error cuando falla en algun punto la lectura del archivo gimnasio.
+void imp_err_lectura_archivo_gimnasio(){
+    printf(ROJO"Error en los parametros a la hora de leer una linea del archivo del gimnasio\n");
     printf(NORMAL"");
 }
 
-//Mensaje de error cuando la cantidad de elementos leidos en la linea de un pokemon del archivo de personaje no es la esperada
-void imp_err_cant_items_lectura_linea_pokemon_personaje(){
-    printf(ROJO"La cantidad de elementos leidos en la linea de pokemon del archivo personaje no es la esperada\n");
-    printf(NORMAL"");
-}
+
+
+
+
 
 
 
@@ -120,58 +236,90 @@ void imp_err_cant_items_lectura_linea_pokemon_personaje(){
 
 //Mensaje de bienvenida al iniciar la estructura
 void imp_msj_bienvenida(){
-	printf("Bienvenidos a la gran aventura pokemon!!\n");
+	printf(NORMAL"Bienvenidos a la gran aventura pokemon!!\n");
 }
 
 //Mensaje de siguiente gimnasio con el que se tendrá que enfrentar el jugador.
 void imp_msj_sig_gim_a_enfrentar(char* nombre, bool es_simulacion){
 	if(!es_simulacion){
 		system("clear");
-		printf("\nAhora te enfrentaras al %s\n", nombre);
+		printf(NORMAL"\nAhora te enfrentaras al %s\n", nombre);
 	}
+}
+
+//Mensaje de siguiente entrenador con el que se tendrá que enfrentar el jugador.
+void imp_sig_entrenador_a_enfrentar(char* nombre, bool es_simulacion){
+    if(!es_simulacion){
+        printf(NORMAL"\nAhora te enfrentaras con %s\n", nombre);
+    }
 }
 
 //Mensaje de se ha ganado una nueva medalla
 void imp_msj_medalla_obtenida(char* nombre, bool es_simulacion){
-	if(!es_simulacion)
+	if(!es_simulacion){
 		printf(VERDE"\nHas obtenido la medalla de %s\n", nombre);
+        printf(NORMAL"");
+    }
+}
+
+//Mensaje de se ha ganado una nueva medalla
+void imp_entrenador_vencido(char* nombre, bool es_simulacion){
+    if(!es_simulacion){
+        printf(VERDE"Venciste a %s\n", nombre);
+        printf(NORMAL"");
+    }
+}
+
+//Mensaje de se ha perdido contra un entrenador
+void imp_entrenador_me_vencio(char* nombre){
+    printf(ROJO"Fuiste derrotado por %s\n", nombre);
+    printf(NORMAL"");
+}
+
+//Mensaje de ha ocurrido un error durante el duelo contra otro entrenador
+void imp_error_en_duelo(){
+    printf(ROJO"Ha ocurrido un error durante uno de los combates, el duelo queda suspendido.\n");
+    printf(NORMAL"");
 }
 
 //Mensaje de rendicion y final del juego.
 void imp_msj_finalizacion_por_rendicion(char* nombre){
 	printf(AMARILLO"\nHas sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", nombre);
+    printf(NORMAL"");
 }
 
 //Mensaje de final del juego debido a un error.
 void imp_msj_finalizacion_por_error(){
 	printf(ROJO"Debido al error tu aventura tendrá que posponerse...\n");
+    printf(NORMAL"");
 }
 
 //Mensaje de Victoria al ganar todos los gimnasios y terminar el juego
 void imp_msj_finalizacion_por_victoria(size_t medallas_ganadas){
 	printf(VERDE"Felicidades, has recolectado las %u medallas de gimnasio y ganado la Liga Pokemon!!\n", medallas_ganadas);
+    printf(NORMAL"");
 }
 
 //Mensaje que indica quien es el dueño del equipo que se muestra a continuacion
 void imp_msj_muestro_duenio_equipo(char* nombre){
     system("clear");
-    printf("A continuacion se muestra el equipo de %s\n", nombre);
+    printf(NORMAL"A continuacion se muestra el equipo de %s\n", nombre);
 }
 
 //Mensaje que indica que los pokemones que aparecen a continuacion son los capturados del jugador.
 void imp_msj_muestro_capturados(){
     system("clear");
-    printf("A continuacion se muestran tus pokemones capturados\n");
+    printf(NORMAL"A continuacion se muestran tus pokemones capturados\n");
 }
 
 //Mensaje que indica al usario como ingresar la posicion que desee reemplazar
 void imp_msj_ingresar_posicion(){
-    printf("Ingrese la posicion del pokemon que desea reemplazar (la primera posicion es la 0) o -1 si se arrepiente\n");
+    printf(NORMAL"Ingrese la posicion del pokemon que desea reemplazar (la primera posicion es la 0) o -1 si se arrepiente\n");
 }
 
 //Mensaje que indica que lo que se muestra a continuacion es el pokemon seleccionado
 void imp_msj_pkm_seleccionado(){
-    printf("Pokemon seleccionado:\n");
+    printf(NORMAL"Pokemon seleccionado:\n");
 }
 
 //Mensaje de transferencia realizada con exito.
@@ -182,11 +330,15 @@ void imp_msj_transferencia_exitosa(){
 
 //Mensaje de introduccion a la carga del personaje
 void imp_msj_intro_carga_personaje(){
-    printf("Para ingreasar ingresar al personaje jugable indique la direccion del archivo, por ejemplo Personajes/Kanto/Ash.txt\n");
+    printf(NORMAL"Para ingreasar ingresar al personaje jugable indique la direccion del archivo, por ejemplo Personajes/Kanto/Ash.txt\n");
     printf("En caso de ocurrir algun error, se cargará la informacion del personaje que se pueda\n");
 }
 
-
+//Mensaje de introduccion a la carga del gimnasio
+void imp_msj_intro_carga_gimnasio(){
+    printf(NORMAL"Para ingreasar ingresar un gimnasio indique la direccion del archivo, por ejemplo Gimnasios/Kanto/Misty.txt\n");
+    printf("En caso de ocurrir algun error, este se indicará.\n");
+}
 
 
 
@@ -200,7 +352,7 @@ void imp_msj_intro_carga_personaje(){
 void pedir_direccion(char* direccion){
     if(!direccion)
         return;
-    printf("\n Ingrese la direccion del archivo: ");
+    printf(NORMAL"\n Ingrese la direccion del archivo: ");
     scanf("%199s", direccion);
 }
 
@@ -214,7 +366,7 @@ void pedir_letra_para_continuar(){
 
 void imprimir_pokemon(pokemon_t* pokemon){
     if(!pokemon){
-        printf("No se selecciono un pokemon\n");
+        printf(NORMAL"No se selecciono un pokemon\n");
         return;
     }
     printf(AMARILLO"%-50s\n", pokemon->nombre);
@@ -239,6 +391,7 @@ void mostrar_combate_pokemon(pokemon_t* pokemon_jugador, pokemon_t* pokemon_entr
     }else{
         printf(ROJO"TU POKEMON PIERDE!!\n\n");
     }
+    printf(NORMAL"");
 }
 
 
@@ -254,7 +407,7 @@ void mostrar_equipo(lista_t* equipo){
 }
 
 void mostrar_jugador(personaje_t* jugador){
-    printf("Nombre del jugador: %s\n", jugador->nombre);
+    printf(NORMAL"Nombre del jugador: %s\n", jugador->nombre);
     printf("Ciudad de origen: %s\n", jugador->ciudad_natal);
     printf("Medallas ganadas: %u\n", jugador->medallas_ganadas);
     printf(VERDE"Equipo Pokemon:\n");
@@ -265,7 +418,7 @@ void mostrar_jugador(personaje_t* jugador){
 
 
 void imprimir_entrenador(entrenador_t* entrenador){
-    printf("%s\n", entrenador->nombre);
+    printf(NORMAL"%s\n", entrenador->nombre);
     mostrar_equipo(entrenador->equipo);
 }
 
@@ -310,7 +463,7 @@ void mostrar_gimnasios(heap_t* gimnasios){
 
 
 void mostrar_opciones_menu_victoria(bool ya_robo){
-    printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
+    printf(NORMAL"Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
     if(!ya_robo){
         printf(" %c --> Elegir uno de los pokemones del equipo del lider derrotado para añadirlo a tu equipo\n", TOMAR_PRESTADO);
     }
@@ -319,7 +472,7 @@ void mostrar_opciones_menu_victoria(bool ya_robo){
 }
 
 char pedir_instruccion_victoria(bool ya_robo){
-    printf("Ingrese uno de los comandos de arriva...\n");
+    printf(NORMAL"Ingrese uno de los comandos de arriva...\n");
     char letra = (char)getchar();
     if(letra!=TOMAR_PRESTADO && letra!=CAMBIAR_EQUIPO && letra!=PROXIMO){
         printf("El comando ingresado no es valido\n");

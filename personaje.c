@@ -12,7 +12,7 @@ bool leer_linea_personaje(FILE* archivo_personaje, personaje_t* personaje, int c
     char ciudad_natal_personaje[MAX_NOMBRE];
     int leidos = fscanf(archivo_personaje, FORMATO_LECTURA_PERSONAJE, nombre_personaje, ciudad_natal_personaje);
     if(leidos != cant_items_esperados){
-        imp_err_cant_items_lectura_primera_linea_personaje();
+        imp_err_cant_items_lectura_linea_personaje();
         return false;
     }
     strcpy(personaje->nombre, nombre_personaje);
@@ -77,10 +77,15 @@ bool leer_linea_pokemon_personaje(FILE* archivo_personaje, personaje_t* personaj
         return false;
     }
     pokemon_t* nuevo_pkm = calloc(1, sizeof(pokemon_t));
+    if(!nuevo_pkm){
+        imp_err_reserva_de_memoria_pkmn();
+        return false;
+    }
+
     int leidos = fscanf(archivo_personaje, FORMATO_LECTURA_POKEMON, nuevo_pkm->nombre, nuevo_pkm->tipo, &(nuevo_pkm->velocidad), &(nuevo_pkm->ataque), &(nuevo_pkm->defensa));
     if(leidos != cant_items_esperados){
         if(!feof(archivo_personaje)){
-            imp_err_cant_items_lectura_linea_pokemon_personaje();
+            imp_err_cant_items_lectura_linea_pokemon();
         }
         free(nuevo_pkm);
         return false;
@@ -93,6 +98,9 @@ bool leer_linea_pokemon_personaje(FILE* archivo_personaje, personaje_t* personaj
 //Devuelve el puntero al persoanje en memoria o NULL en caso de Error la reservar la memoria.
 //En caso de Error en la lectura del archivo se devolvera el puntero al personaje con la informacion cargada hasta donde se haya podido leer.
 personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
+    if(!archivo_personaje){
+        return NULL;
+    }
 
     personaje_t* personaje = calloc(1, sizeof(personaje_t));
     if(!personaje){
@@ -101,19 +109,19 @@ personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
     }
 
     bool todo_ok = true;
-    char tipo_linea = ENTRENADOR;
+    char tipo_linea = ENTRENADOR; //La primera linea del archivo de personaje debería ser la que tiene los datos del personaje en si, siempre. 
 
-    leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
-    todo_ok = leer_linea_personaje(archivo_personaje, personaje, CANT_ITEMS_PERSONAJE);  //la primera linea siempre debe ser la del personaje
-    
+    todo_ok = leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
+
     while(todo_ok){
-        leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
-
-        if(tipo_linea == POKEMON){
+        if(tipo_linea == ENTRENADOR){
+            todo_ok = leer_linea_personaje(archivo_personaje, personaje, CANT_ITEMS_PERSONAJE);
+        }else if(tipo_linea == POKEMON){
             todo_ok = leer_linea_pokemon_personaje(archivo_personaje, personaje, CANT_ITEMS_POKEMON);
         }else{
             todo_ok = false;
         }
+        leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
     }
     return personaje;
 }
