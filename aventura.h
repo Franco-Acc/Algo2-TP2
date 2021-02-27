@@ -6,7 +6,7 @@
 /*
  *Juega una partida con todos los Menus y salidas por pantalla disponibles.
  */
-void jugar(personaje_t* jugador, heap_t* gimnasios);
+void jugar(personaje_t* jugador, heap_t* gimnasios, bool es_simulacion);
 
 /*
  *Juega una partida sin los Menus hasta perder en alguna batalla o ganar toda la liga.

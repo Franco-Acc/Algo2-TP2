@@ -81,6 +81,8 @@ void imp_err_cant_items_lectura_linea_gimnasio();
 void imp_err_cant_items_lectura_linea_entrenador();
 //Mensaje de error cuando la cantidad de elementos leidos en la linea de un pokemon del archivo de gimnasio no es la esperada.
 void imp_err_cant_items_lectura_linea_pokemon();
+//Mensaje de error cuando el pokemon leido del archivo tiene un tipo incorrecto.
+void imp_err_pkm_tipo_invalido(pokemon_t* pokemon);
 //Mensaje de error cuando falla en algun punto la lectura del archivo personaje.
 void imp_err_lectura_archivo_personaje();
 //Mensaje de error cuando falla en algun punto la lectura del archivo gimnasio.
@@ -112,7 +114,7 @@ void imp_error_en_duelo();
 //Mensaje de rendicion y final del juego.
 void imp_msj_finalizacion_por_rendicion(char* nombre);
 //Mensaje de final del juego debido a un error.
-void imp_msj_finalizacion_por_error()
+void imp_msj_finalizacion_por_error();
 //Mensaje de Victoria al ganar todos los gimnasios y terminar el juego
 void imp_msj_finalizacion_por_victoria(size_t medallas_ganadas);
 //Mensaje que indica que lo que se muestra a continuacion es el equipo del lider de gimnasio

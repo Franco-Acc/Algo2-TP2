@@ -6,17 +6,31 @@
 
 //Determina que funcion de batalla se empleará a partir del valor recibido (se supone que el valor es el que esta en el archivo de gimnasio)
 funcion_batalla determinar_funcion(size_t n){
-    if(n==1)
+    if(n==1){
         return funcion_batalla_1;
-    if(n==2)
+    }else if(n==2){
         return funcion_batalla_2;
-    if(n==3)
+    }else if(n==3){
         return funcion_batalla_3;
-    if(n==4)
+    }else if(n==4){
         return funcion_batalla_4;
-    else
+    }else{
         return funcion_batalla_5;
+    }
 }
+
+
+//Lee la primera letra de una linea de un archivo de texto y la almacena en la varaibel pasada por referencia.
+bool leer_primera_letra_de_linea(FILE* archivo, char* letra){
+    if(!archivo || !letra)
+        return false;
+   int leidos = fscanf(archivo, FORMATO_LECTURA_PRIMERA_LETRA, letra);
+   if(leidos!=1 || leidos==EOF){
+        return false;
+   }
+   return true;
+}
+
 
 //Lee la primera linea del archivo de gimnasio y carga los datos al gimnasio pasado que ya esta en memoria.
 //Si la lectura es correcta devuelve true y si no lee la cantidad de parametros esperados devuelve false.
@@ -87,7 +101,7 @@ bool leer_linea_entrenador(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int 
 
 
 //Agrega un nuevo pokemon al entrenador dado, devuelve true si pudo hacerlo o false en caso de error.
-bool agregar_nuevo_pokemon(entrenador_t* entrenador, pokemon_t* pokemon){
+bool agregar_nuevo_pokemon_entrenador(entrenador_t* entrenador, pokemon_t* pokemon){
     if(!entrenador || !pokemon){
     	imp_err_falta_argumento_en_agregar_pokemon();
         free(pokemon);
@@ -133,12 +147,18 @@ bool leer_linea_pokemon_gimnasio(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio
         free(nuevo_pkm);
         return false;
     }
-    return agregar_nuevo_pokemon(lista_tope(un_gimnasio->entrenadores), nuevo_pkm);
+
+    if(!es_pkm_valido(nuevo_pkm)){
+        imp_err_pkm_tipo_invalido(nuevo_pkm);
+        strcpy(nuevo_pkm->tipo, AGUA);          //Con esto en caso de haber ingresado un pokemon de tipo invalido se cambiara su tipo a uno por defecto, agua. De esta forma evito tirar todo el pokemon a la basura solo porque el tipo es incorrecto.
+    }
+
+    return agregar_nuevo_pokemon_entrenador(lista_tope(un_gimnasio->entrenadores), nuevo_pkm);
 }
 
 
 //Carga la informacion del archivo gimnasio a un gimnasio en el heap (reserva la memoria necesario para ello)
-//Devuelve el puntero al gimnasio en memoria o NULL en caso de Error la reservar la memoria.
+//Devuelve el puntero al gimnasio en memoria o NULL en caso de Error en la reservar la memoria.
 //En caso de Error en la lectura del archivo se devolvera el gimnasio con la informacion cargada hasta donde se haya podido leer.
 gimnasio_t* leer_archivo_gimnasio(FILE* archivo_gimnasio){
     if(!archivo_gimnasio){

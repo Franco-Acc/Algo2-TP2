@@ -128,7 +128,7 @@ void cambiar_equipo(personaje_t* jugador){
     if(posicion>=0){
         es_lo_esperado = false;
         while(!es_lo_esperado){
-           imp_msj_muestro_capturados()
+           imp_msj_muestro_capturados();
             mostrar_equipo(jugador->capturados);
             imp_msj_ingresar_posicion();
             posicion = pedir_posicion_pokemon(lista_elementos(jugador->capturados));
@@ -205,8 +205,9 @@ char menu_inicial(personaje_t** jugador, heap_t* gimnasios){
         }
 
         if(heap_vacio(gimnasios)){
-            imp_err_falta_jugador()
+            imp_err_falta_gimnasio();
         }
+
         return menu_inicial(jugador, gimnasios);
     }
     return letra;

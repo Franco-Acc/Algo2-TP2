@@ -217,6 +217,18 @@ void imp_err_cant_items_lectura_linea_pokemon(){
     printf(ROJO"La cantidad de elementos leidos en la linea de un pokemon del archivo no es la esperada\n");
     printf(NORMAL"");
 }
+
+//Mensaje de error cuando el pokemon leido del archivo tiene un tipo incorrecto.
+void imp_err_pkm_tipo_invalido(pokemon_t* pokemon){
+    printf(AMARILLO"Se leyó del archivo un pokemon con un tipo inválido\n");
+    printf(NORMAL"Se le recuerda al ususario que los unicos tipos validos son (tal cual estan escritos respetando las mayusculas) :\n");
+    printf("Agua | Tierra | Fuego | Aire :\n\n");
+    printf("Mientras que el pokemon leido es:\n");
+    imprimir_pokemon(pokemon);
+    printf("El tipo del pokemon será cambiado a %s por defecto y asi será cargado\n", AGUA);
+    printf(NORMAL"");
+}
+
 //Mensaje de error cuando falla en algun punto la lectura del archivo personaje.
 void imp_err_lectura_archivo_personaje(){
     printf(ROJO"Error en los parametros a la hora de leer una linea del archivo del personaje\n");
@@ -238,14 +250,13 @@ void imp_err_lectura_archivo_gimnasio(){
 
 
 
-
 //Mensaje de bienvenida al iniciar la estructura
 void imp_msj_bienvenida(){
 	printf(NORMAL"Bienvenidos a la gran aventura pokemon!!\n");
 }
 
 //Mensaje de siguiente gimnasio con el que se tendrá que enfrentar el jugador.
-void imp_msj_sig_gim_a_enfrentar(char* nombre, bool es_simulacion){
+void imp_sig_gim_a_enfrentar(char* nombre, bool es_simulacion){
 	if(!es_simulacion){
 		system("clear");
 		printf(NORMAL"\nAhora te enfrentaras al %s\n", nombre);
@@ -260,7 +271,7 @@ void imp_sig_entrenador_a_enfrentar(char* nombre, bool es_simulacion){
 }
 
 //Mensaje de se ha ganado una nueva medalla
-void imp_msj_medalla_obtenida(char* nombre, bool es_simulacion){
+void imp_medalla_obtenida(char* nombre, bool es_simulacion){
 	if(!es_simulacion){
 		printf(VERDE"\nHas obtenido la medalla de %s\n", nombre);
         printf(NORMAL"");
@@ -415,7 +426,7 @@ void mostrar_equipo(lista_t* equipo){
 
 //Muestra por pantalla toda la informacion del personaje controlado por el usuario.
 void mostrar_jugador(personaje_t* jugador){
-    printf(NORMAL"Nombre del jugador: %s\n", jugador->nombre);
+    printf(AMARILLO"Nombre del jugador: %s\n", jugador->nombre);
     printf("Ciudad de origen: %s\n", jugador->ciudad_natal);
     printf("Medallas ganadas: %u\n", jugador->medallas_ganadas);
     printf(VERDE"Equipo Pokemon:\n");
@@ -479,7 +490,7 @@ void mostrar_opciones_menu_victoria(bool ya_robo){
         printf(" %c --> Elegir uno de los pokemones del equipo del lider derrotado para añadirlo a tu equipo\n", TOMAR_PRESTADO);
     }
     printf(" %c --> Cambiar los pokemones en tu equipo con aquellos que hayas capturado\n", CAMBIAR_EQUIPO);
-    printf(" %c --> Siguiente gimnaio\n", PROXIMO);
+    printf(" %c --> Siguiente gimnasio\n", PROXIMO);
 }
 
 //Pide al usuario que ingrerse uno de los comandos que tiene disponible en el menu victoria.
@@ -493,7 +504,7 @@ char pedir_instruccion_victoria(bool ya_robo){
         return pedir_instruccion_victoria(ya_robo);
     }
     if((letra==TOMAR_PRESTADO) && ya_robo){
-        printf("Solo pudes tomar prestado un poquemon del lider y ya lo hiciste\n");
+        printf("Solo pudes tomar prestado un pokemon del lider y ya lo hiciste\n");
         return pedir_instruccion_victoria(ya_robo);
     }
     return letra;
@@ -550,10 +561,12 @@ bool quiere_seguir_cargando(){
     char respuesta;
     printf("Quiere cargar otro gimnasio??\n Y/N : ");
     scanf(" %c", &respuesta);
-    if(respuesta==SI)
+    if(respuesta==SI){
         return true;
-    if(respuesta==NO)
+    }
+    if(respuesta==NO){
         return false;
+    }
     printf("Recurde solo ingresar uno de los carcateres indicados, en mayuscula\n");
     return quiere_seguir_cargando();
 }
@@ -563,7 +576,7 @@ void mostrar_opciones_menu_derrota(){
     printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
     printf(" %c --> Cambiar los pokemones en tu equipo con aquellos que hayas capturado\n", CAMBIAR_EQUIPO);
     printf(" %c --> Reintentar gimnaio\n", REINTENTAR);
-    printf(" %c --> REndirse\n", RENDIRSE);
+    printf(" %c --> Rendirse\n", RENDIRSE);
 }
 
 //Pide al usuario que ingrerse uno de los comandos que tiene disponible en el menu derrota.
@@ -587,7 +600,7 @@ void mostrar_opciones_menu_inicial(){
     printf(" %c --> Ingreasar archivo del personaje principal\n", INGRESAR_JUGADOR);
     printf(" %c --> Ingreasar archivos de gimnasios\n", INGRESAR_GIMNASIO);
     printf(" %c --> Jugar una partida con los datos cargados\n", JUGAR);
-    printf(" %c --> simular una partida con los datos cargados\n", SIMULAR);
+    printf(" %c --> Simular una partida con los datos cargados\n", SIMULAR);
 }
 
 //Pide al usuario que ingrerse uno de los comandos que tiene disponible en el menu inicial.

@@ -1,5 +1,20 @@
 
 #include "personaje.h"
+#include "interfaz.h"
+
+
+//Lee la primera letra de una linea de un archivo de texto y la almacena en la varaibel pasada por referencia.
+bool leer_primera_letra_de_linea(FILE* archivo, char* letra){
+    if(!archivo || !letra)
+        return false;
+   int leidos = fscanf(archivo, FORMATO_LECTURA_PRIMERA_LETRA, letra);
+   if(leidos!=1 || leidos==EOF){
+        return false;
+   }
+   return true;
+}
+
+
 
 //Lee la primera linea del archivo de personaje y carga los datos al personaje pasado que ya esta en memoria.
 //Si la lectura es correcta devuelve true y si no lee la cantidad de parametros esperados devuelve false.
@@ -26,7 +41,7 @@ bool leer_linea_personaje(FILE* archivo_personaje, personaje_t* personaje, int c
 //Si el equipo del personaje esta lleno se hace lo mismo pero con capturados (caja).
 bool agregar_nuevo_pokemon_personaje(personaje_t* personaje, pokemon_t* pokemon){
     if(!personaje || !pokemon){
-        imp_err_falta_argumento_en_agregar_pokemon()
+        imp_err_falta_argumento_en_agregar_pokemon();
         free(pokemon);
         return false;
     } 
@@ -51,7 +66,7 @@ bool agregar_nuevo_pokemon_personaje(personaje_t* personaje, pokemon_t* pokemon)
 //Si la lectura es correcta devuelve true y si no lee la cantidad de parametros esperados devuelve false.
 bool leer_linea_pokemon_personaje(FILE* archivo_personaje, personaje_t* personaje, int cant_items_esperados){
     if(!archivo_personaje || !personaje || cant_items_esperados<1){
-        imp_err_falta_argumento_en_leer_linea_personaje()
+        imp_err_falta_argumento_en_leer_linea_personaje();
         return false;
     }
     pokemon_t* nuevo_pkm = calloc(1, sizeof(pokemon_t));
@@ -68,12 +83,19 @@ bool leer_linea_pokemon_personaje(FILE* archivo_personaje, personaje_t* personaj
         free(nuevo_pkm);
         return false;
     }
+
+
+    if(!es_pkm_valido(nuevo_pkm)){
+        imp_err_pkm_tipo_invalido(nuevo_pkm);
+        strcpy(nuevo_pkm->tipo, AGUA);          //Con esto en caso de haber ingresado un pokemon de tipo invalido se cambiara su tipo a uno por defecto, agua. De esta forma evito tirar todo el pokemon a la basura solo porque el tipo es incorrecto.
+    }
+
     return agregar_nuevo_pokemon_personaje(personaje, nuevo_pkm);
 }
 
 
 //Carga la informacion del archivo personaje a un personaje en el heap (reserva la memoria necesario para ello).
-//Devuelve el puntero al persoanje en memoria o NULL en caso de Error la reservar la memoria.
+//Devuelve el puntero al personaje en memoria o NULL en caso de Error en la reservar la memoria.
 //En caso de Error en la lectura del archivo se devolvera el puntero al personaje con la informacion cargada hasta donde se haya podido leer.
 personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
     if(!archivo_personaje){
@@ -113,6 +135,8 @@ personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
             todo_ok = leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
         }
     }
+
+
     return personaje;
 }
 

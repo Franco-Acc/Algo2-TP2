@@ -2,6 +2,7 @@
 #include "gimnasio.h"
 #include "personaje.h"
 #include "menus.h"
+#include "interfaz.h"
 
 //Añade una medalla al personaje principal.
 void aniadir_medalla(personaje_t* jugador){
@@ -25,7 +26,7 @@ void jugar(personaje_t* jugador, heap_t* gimnasios, bool es_simulacion){
 
     while(gimnasio_actual && (!se_rinde)){
 
-    	imp_msj_sig_gim_a_enfrentar(gimnasio_actual->nombre, es_simulacion);
+    	imp_sig_gim_a_enfrentar(gimnasio_actual->nombre, es_simulacion);
         resultado = enfrentar_gimnasio(jugador, gimnasio_actual, es_simulacion);
 
         if(resultado==VICTORIA){
@@ -91,16 +92,18 @@ int main(){
 	heap_t* gimnasios;
 	personaje_t* jugador;
 
-	if(crear_estructuras(&gimnasios, &jugador)==ERROR)
+	if(crear_estructuras(&gimnasios, &jugador)==ERROR){
 		return 0;
+    }
 
 	imp_msj_bienvenida();
 	
 	char instruccion = menu_inicial(&jugador, gimnasios);
 	bool es_simulacion = true;
 
-	if(instruccion == JUGAR)
+	if(instruccion == JUGAR){
 		es_simulacion = false;
+    }
 		
 	jugar(jugador, gimnasios, es_simulacion);
 

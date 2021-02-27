@@ -71,30 +71,22 @@ void liberar_gimnasios(heap_t* gimnasios){
     heap_destruir(gimnasios);
 }
 
-//Lee la primera letra de una linea de un archivo de texto y la almacena en la varaibel pasada por referencia.
-bool leer_primera_letra_de_linea(FILE* archivo, char* letra){
-	if(!archivo || !letra)
-		return false;
-   int leidos = fscanf(archivo, FORMATO_LECTURA_PRIMERA_LETRA, letra);
-   if(leidos!=1 || leidos==EOF){
-        return false;
-   }
-   return true;
-}
-
 
 //Devuelve true si el pokemon es valido y false si no.
 bool es_pkm_valido(pokemon_t* pokemon){
-	if((pokemon->tipo != AGUA)&&())
-	return true;
-}
-//Devuelve true si el entrenador es valido y false si no.
-bool es_entrenador_valido(entrenador_t* entrenador){
+	if(!pokemon){
+		return false;
+	}
 
-	return true;
-}
-//Devuelve true si el personaje es valido y false si no.
-bool es_personaje_valido(personaje_t* personaje){
-
-	return true;
+	if(strcmp(pokemon->tipo, AGUA)){
+		return true;
+	}else if(strcmp(pokemon->tipo, TIERRA)){
+		return true;
+	}else if(strcmp(pokemon->tipo, FUEGO)){
+		return true;
+	}else if(strcmp(pokemon->tipo, AIRE)){
+		return true;
+	}else{
+		return false;
+	}
 }
