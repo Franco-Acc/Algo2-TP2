@@ -4,7 +4,6 @@
 #include "gimnasio.h"
 
 
-
 void menu_combate(pokemon_t* pokemon_jugador, pokemon_t* pokemon_entrenador, int resultado_combate){
     if(!pokemon_jugador || !pokemon_entrenador){
         return imp_err_falta_argumento_en_enfrentamiento();
@@ -147,7 +146,7 @@ void cambiar_equipo(personaje_t* jugador){
     }
 }
 
-
+//Se lleva a acabo la tarea dada por el comnado ingresado por el usuario en el menu victoria.
 void ejecutar_instruccion_menu_victoria(char letra, personaje_t* jugador, entrenador_t* lider, bool* ya_robo){
     if(letra==TOMAR_PRESTADO)
         tomar_prestado(jugador, lider, ya_robo);
@@ -164,7 +163,7 @@ void menu_victoria(personaje_t* jugador, entrenador_t* lider, bool ya_robo){
         return menu_victoria(jugador, lider, ya_robo);
 }
 
-
+//Se lleva a acabo la tarea dada por el comnado ingresado por el usuario en el menu derrota.
 void ejecutar_instruccion_menu_derrota(char letra, personaje_t* jugador){
     if(letra==CAMBIAR_EQUIPO)
         cambiar_equipo(jugador);
@@ -179,7 +178,7 @@ char menu_derrota(personaje_t* jugador){
     return letra;
 }
 
-
+//Se lleva a acabo la tarea dada por el comnado ingresado por el usuario en el menu incial.
 void ejecutar_instruccion_menu_inicial(char letra, personaje_t** jugador, heap_t* gimnasios){
     if(letra == INGRESAR_JUGADOR)
         cargar_personaje(jugador); 
@@ -213,7 +212,7 @@ char menu_inicial(personaje_t** jugador, heap_t* gimnasios){
     return letra;
 }
 
-
+//Se lleva a acabo la tarea dada por el comnado ingresado por el usuario en el menu gimnasio.
 void ejecutar_instruccion_menu_gimnasio(char letra, personaje_t* jugador, gimnasio_t* gimnasio){
     if(letra==MOSTRAR_JUGADOR)
         mostrar_jugador(jugador);

@@ -37,7 +37,7 @@ bool leer_linea_gimnasio(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int ca
 
 
 //Agrega un nuevo entrenador al gimnasio dado.
-//Si el gimnasio no tenia ningun entrenador crea la pila de entrenadores necesaria, de existir solo se apila.
+//Si algo falla devuelve false, si todo sale bien devuelve true.
 bool agregar_nuevo_entrenador(gimnasio_t* gimnasio, char nombre_entrenador[]){
 	if(!gimnasio){
 		imp_err_falta_gimnasio();
@@ -49,15 +49,19 @@ bool agregar_nuevo_entrenador(gimnasio_t* gimnasio, char nombre_entrenador[]){
         imp_err_reserva_de_memoria_entrenador();
         return false;
     }
+
+    nuevo_entrenador->equipo = lista_crear();
+    if(!nuevo_entrenador->equipo){
+        imp_err_crear_lista();
+        free(nuevo_entrenador);
+        return false;
+    }
     
     strcpy(nuevo_entrenador->nombre, nombre_entrenador);
-    
-    if(!gimnasio->entrenadores){
-        gimnasio->entrenadores = lista_crear();
-    }
-
+ 
     if(lista_apilar(gimnasio->entrenadores, nuevo_entrenador)==ERROR){
     	imp_err_insertar_entrenador();
+        liberar_entrenador(nuevo_entrenador);
         return false;
     }
 
@@ -83,20 +87,9 @@ bool leer_linea_entrenador(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int 
 
 
 //Agrega un nuevo pokemon al entrenador dado, devuelve true si pudo hacerlo o false en caso de error.
-//Si el entrenador no tenia ningun pokemon crea la lista necesaria para el equipo, de existir solo se encola.
 bool agregar_nuevo_pokemon(entrenador_t* entrenador, pokemon_t* pokemon){
     if(!entrenador || !pokemon){
     	imp_err_falta_argumento_en_agregar_pokemon();
-        free(pokemon);
-        return false;
-    }
-
-    if(!entrenador->equipo){
-        entrenador->equipo = lista_crear();
-    }
-
-    if(!entrenador->equipo){
-    	imp_err_crear_lista();
         free(pokemon);
         return false;
     }
@@ -120,12 +113,18 @@ bool agregar_nuevo_pokemon(entrenador_t* entrenador, pokemon_t* pokemon){
 
 //Lee la linea de pokemon del archivo de gimnasio y carga los datos al gimnasio pasado que ya esta en memoria.
 //Si la lectura es correcta devuelve true y si no lee la cantidad de parametros esperados devuelve false.
-bool leer_linea_pokemon(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int cant_items_esperados){
+bool leer_linea_pokemon_gimnasio(FILE* archivo_gimnasio, gimnasio_t* un_gimnasio, int cant_items_esperados){
 	if(!archivo_gimnasio || !un_gimnasio || cant_items_esperados<1){
 		imp_err_falta_argumento_en_leer_linea_pkm();
 		return false;
 	}
+    
     pokemon_t* nuevo_pkm = calloc(1, sizeof(pokemon_t));
+    if(!nuevo_pkm){
+        imp_err_reserva_de_memoria_pkmn();
+        return false;
+    }
+
     int leidos = fscanf(archivo_gimnasio, FORMATO_LECTURA_POKEMON, nuevo_pkm->nombre, nuevo_pkm->tipo, &(nuevo_pkm->velocidad), &(nuevo_pkm->ataque), &(nuevo_pkm->defensa));
     if(leidos != cant_items_esperados){
         if(!feof(archivo_gimnasio)){
@@ -152,23 +151,35 @@ gimnasio_t* leer_archivo_gimnasio(FILE* archivo_gimnasio){
         return NULL;
     }
 
-    bool todo_ok = true;
-    char tipo_linea = GIMNASIO;
+    un_gimnasio->entrenadores = lista_crear();
+    if(!un_gimnasio->entrenadores){
+        imp_err_crear_lista();
+        free(un_gimnasio);
+        return NULL;
+    }
 
-    leer_primera_letra_de_linea(archivo_gimnasio, &tipo_linea);
-    todo_ok = leer_linea_gimnasio(archivo_gimnasio, un_gimnasio, CANT_ITEMS_GIMNASIO);  //la primera linea siempre debe ser la del gimnasio
+    bool todo_ok = true;
+    char tipo_linea = GIMNASIO; //La primera linea siempre deberia ser la del gimnasio
+    
+
+    todo_ok = leer_primera_letra_de_linea(archivo_gimnasio, &tipo_linea);
     
     while(todo_ok){
-        leer_primera_letra_de_linea(archivo_gimnasio, &tipo_linea);
-
-        if((tipo_linea == ENTRENADOR) || (tipo_linea == LIDER)){
+        if(tipo_linea == GIMNASIO){
+            todo_ok = leer_linea_gimnasio(archivo_gimnasio, un_gimnasio, CANT_ITEMS_GIMNASIO);  
+        }else if((tipo_linea == ENTRENADOR) || (tipo_linea == LIDER)){
             todo_ok = leer_linea_entrenador(archivo_gimnasio, un_gimnasio, CANT_ITEMS_ENTRENADOR);
         }else if(tipo_linea == POKEMON){
-            todo_ok = leer_linea_pokemon(archivo_gimnasio, un_gimnasio, CANT_ITEMS_POKEMON);
+            todo_ok = leer_linea_pokemon_gimnasio(archivo_gimnasio, un_gimnasio, CANT_ITEMS_POKEMON);
         }else{
             todo_ok = false;
         }
+
+        if(todo_ok){
+            todo_ok = leer_primera_letra_de_linea(archivo_gimnasio, &tipo_linea);
+        }
     }
+
     return un_gimnasio;
 }
 
@@ -225,7 +236,7 @@ void cargar_gimnasio(heap_t* heap, char* direccion_gimasio){
 }
 
 
-
+//Pide al ususario la direccion de los archivos de gimnasio que quiera cargar al programa, y carga dichos archivos.
 void cargar_gimnasios(heap_t* gimnasios){
     
     char direccion_gimasio[MAX_DIRECCION];
@@ -265,6 +276,8 @@ int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_b
     lista_iterador_t* iterador_equipo_entrenador = lista_iterador_crear(equipo_entrenador);
 
     if(!iterador_equipo_jugador || !iterador_equipo_entrenador){
+        lista_iterador_destruir(iterador_equipo_jugador);
+        lista_iterador_destruir(iterador_equipo_entrenador);
         imp_err_crear_iterador_lista();
         return ERROR;
     }
@@ -303,7 +316,8 @@ int duelo_pokemon(lista_t* equipo_jugador, lista_t* equipo_entrenador, funcion_b
 }
 
 
-//
+//Elimina el ultimo entrenador de la lista, liberando la memeoria reservada. y devulviendo false (indica que  no se acabaron los entreandores de la lista dada).
+//En el momento en que no haya mas entrenadores que eliminar devuelve true, indicando que se acabaron los entrenadores de la lista pasada.
 bool eliminar_entrenador_tope(lista_t* entrenadores){
 	if(lista_elementos(entrenadores)>1){
 	    liberar_entrenador(lista_tope(entrenadores));
@@ -313,6 +327,10 @@ bool eliminar_entrenador_tope(lista_t* entrenadores){
 	return true;
 }
 
+
+//Enfrenta al personaje del usuario con todos los entrenadores del gimnasio pasado hasta que los haya vencido a todos o se haya rendido.
+//Si no es una simulacion, irá mostrando los menus y salidas por panatallas correspondientes.
+//Si es una simulacion, solo mostrará por pantalla el mensaje de derrota tras haber perdido ante unn entrenador.
 int enfrentar_gimnasio(personaje_t* jugador, gimnasio_t* gimnasio, bool es_simulacion){
     if(!jugador || !gimnasio){
     	imp_err_falta_argumento_en_enfrentar_gimnasio();

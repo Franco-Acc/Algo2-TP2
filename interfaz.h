@@ -42,6 +42,8 @@ void imp_err_falta_argumento_en_leer_linea_personaje();
 void imp_err_falta_argumento_en_leer_linea_gimnasio();
 //Mensaje de error al faltar uno de los argumentos necesarios para agregar un nuevo pokemon al personaje.
 void imp_err_falta_argumento_en_agregar_pokemon();
+//Mensaje de error al faltar uno de los argumentos necesarios para jugar.
+void imp_err_falta_argumento_en_jugar();
 
 
 

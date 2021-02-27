@@ -22,36 +22,14 @@ bool leer_linea_personaje(FILE* archivo_personaje, personaje_t* personaje, int c
 
 
 //Agrega un nuevo pokemon al personaje dado, devuelve true si pudo hacerlo o false en caso de error.
-//Si el personaje no tenia ningun pokemon crea la lista necesaria para el equipo, de existir solo se encola.
+//El personaje debe tener las listas equipo y capturados ya creadas.
 //Si el equipo del personaje esta lleno se hace lo mismo pero con capturados (caja).
 bool agregar_nuevo_pokemon_personaje(personaje_t* personaje, pokemon_t* pokemon){
     if(!personaje || !pokemon){
         imp_err_falta_argumento_en_agregar_pokemon()
         free(pokemon);
         return false;
-    }
-
-    if(!personaje->equipo){
-        personaje->equipo = lista_crear();
-    }
-
-    if(!personaje->equipo){
-        imp_err_crear_lista();
-        free(pokemon);
-        return false;
-    }
-
-
-    if(!personaje->capturados){
-        personaje->capturados = lista_crear();
-    }
-
-    if(!personaje->capturados){
-        imp_err_crear_lista();
-        free(pokemon);
-        lista_destruir(personaje->equipo);
-        return false;
-    }
+    } 
 
     if(lista_elementos(personaje->equipo)<MAX_EQUIPO){
         if(lista_encolar(personaje->equipo, pokemon)==ERROR){
@@ -108,6 +86,15 @@ personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
         return NULL;
     }
 
+    personaje->equipo = lista_crear();
+    personaje->capturados = lista_crear();
+
+    if(!personaje->equipo || !personaje->capturados){
+        imp_err_crear_lista();
+        free(personaje);
+        return NULL;
+    }
+
     bool todo_ok = true;
     char tipo_linea = ENTRENADOR; //La primera linea del archivo de personaje debería ser la que tiene los datos del personaje en si, siempre. 
 
@@ -121,12 +108,16 @@ personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
         }else{
             todo_ok = false;
         }
-        leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
+
+        if(todo_ok){
+            todo_ok = leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
+        }
     }
     return personaje;
 }
 
-
+//Carga la informacion del archivo personaje pasado al programa.
+//En caso de Error en la lectura del archivo se cargará lo que se haya podido leer.
 void cargar_personaje(personaje_t** jugador){
 
     imp_msj_intro_carga_personaje();  

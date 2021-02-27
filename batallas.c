@@ -74,3 +74,9 @@ int funcion_batalla_5(void* pkm_1, void* pkm_2){
 		return GANO_PRIMERO;
 	return GANO_SEGUNDO;
 }
+
+
+
+
+//NOTA: Los punteros recibidos en las funciones de batalla son igualados a punteros a pokemones para evitar tener que hacer un casteo cada vez que quiero hacer algo con ellos.
+//		Lo hice asi para no cambiar la firma de las funciones y que se sigan manejando con void* .

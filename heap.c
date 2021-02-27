@@ -4,6 +4,8 @@
 #define ERROR -1;
 #define OK	   0;
 
+
+//Realiza un intercambio en el vector entre los elementos en las posiciones dadas.
 void swap(void* vector[], size_t pos_1, size_t pos_2){
 	if(!vector)
 		return;
@@ -12,18 +14,22 @@ void swap(void* vector[], size_t pos_1, size_t pos_2){
 	vector[pos_2] = puntero_aux;
 }
 
+//Calcula y devuelve la posisicion del padre en el vector para un n (posisicion del hijo) dado. 
 size_t posicion_padre(size_t n){
 	return((n-1)/2);
 }
 
+//Calcula y devuelve la posisicion del hijo izquierdo en el vector para un n (posisicion del padre) dado. 
 size_t posicion_hijo_izquierdo(size_t n){
 	return((2*n)+1);
 }
 
+//Calcula y devuelve la posisicion del hijo derecho en el vector para un n (posisicion del padre) dado. 
 size_t posicion_hijo_derecho(size_t n){
 	return((2*n)+2);
 }
 
+//Realiza el sift up al insertar algun elemento en el heap. 
 void sift_up(heap_t* heap, size_t n){
 	if((!heap) || (n==0))
 		return;
@@ -34,6 +40,7 @@ void sift_up(heap_t* heap, size_t n){
 	}
 }
 
+//Realiza el sift down al sacar algun elemento del heap.
 void sift_down(heap_t* heap, size_t n){
 	if(!heap)
 		return;

@@ -136,7 +136,14 @@ void liberar_gimnasios(heap_t* gimnasios);
 int comparador_gimnasios (void* gimnasio_1, void* gimnasio_2);
 
 //Lee la primera letra de la linea del archivo pasado, colocando dicha letra en la variable pasada por referencia.
-void leer_primera_letra_de_linea(FILE* archivo_gimnasio, char* letra);
+bool leer_primera_letra_de_linea(FILE* archivo, char* letra);
+
+//Devuelve true si el pokemon es valido y false si no.
+bool es_pkm_valido(pokemon_t* pokemon);
+//Devuelve true si el entrenador es valido y false si no.
+bool es_entrenador_valido(entrenador_t* entrenador);
+//Devuelve true si el personaje es valido y false si no.
+bool es_personaje_valido(personaje_t* personaje);
 
 
 #endif /* __ESTRUCTURAS_H__ */

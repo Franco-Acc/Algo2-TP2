@@ -11,9 +11,13 @@ void aniadir_medalla(personaje_t* jugador){
     jugador->medallas_ganadas++;
 }
 
+
+//Funcion principal del programa hace que el usuario se enfrente a los gimnasios cargados hasta superarlos a todos o hasta que se rinde. Muestra el resultado final de la aventura por pantalla.
 void jugar(personaje_t* jugador, heap_t* gimnasios, bool es_simulacion){
-	if(!jugador || !gimnasios)
+	if(!jugador || !gimnasios){
+        imp_err_falta_argumento_en_jugar();
 		return;
+    }
 
     bool se_rinde = false;
     int resultado;
@@ -70,6 +74,7 @@ void simular(personaje_t* jugador, heap_t* gimnasios){
 }
 */
 
+//Reserva la memoria necesaria para el heap de gimnasios e inicializa el personaje jugable en NULL.
 int crear_estructuras(heap_t** gimnasios, personaje_t** jugador){
 	*gimnasios = heap_crear(comparador_gimnasios, destructor_gimnasios);
 	if(!gimnasios){

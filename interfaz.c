@@ -90,6 +90,11 @@ void imp_err_falta_argumento_en_agregar_pokemon(){
     printf(NORMAL"");
 }
 
+//Mensaje de error al faltar uno de los argumentos necesarios para jugar.
+void imp_err_falta_argumento_en_jugar(){
+    printf(ROJO"Error en los parametros a la hora de intentar jugar\n");
+    printf(NORMAL"");
+}
 
 
 
@@ -348,7 +353,7 @@ void imp_msj_intro_carga_gimnasio(){
 
 
 
-
+//Pide al usuario que ingrese una direccion de archivo.
 void pedir_direccion(char* direccion){
     if(!direccion)
         return;
@@ -356,17 +361,18 @@ void pedir_direccion(char* direccion){
     scanf("%199s", direccion);
 }
 
-
+//Pide al usuario que ingrese una letra cualquira para continuar la ejecucion del programa.
+//La ejecucion del programa se detiene hasta que el ususrio ingrese dicho caracter.
 void pedir_letra_para_continuar(){
     printf(NORMAL"Presiona cualquier letra para continuar\n");
     getchar();
 }
 
 
-
+//Imprime un pokemon por pantalla, mostrando toda su info.
 void imprimir_pokemon(pokemon_t* pokemon){
     if(!pokemon){
-        printf(NORMAL"No se selecciono un pokemon\n");
+        printf(NORMAL"No se selecciono un pokemon\n");      //CRea que puede sacarse
         return;
     }
     printf(AMARILLO"%-50s\n", pokemon->nombre);
@@ -378,6 +384,7 @@ void imprimir_pokemon(pokemon_t* pokemon){
 
 
 //Muestra toda la informacion de los pokemones que se estan enfrentando en combate en simultaneo con el resutado del combate.
+//Se debe llamar una vez hecho el chequeo de sus parametros, deben ser validos.
 void mostrar_combate_pokemon(pokemon_t* pokemon_jugador, pokemon_t* pokemon_entrenador, int resultado_combate){
     printf(AMARILLO"\t\tCombate Pokemon!!\n");
     printf(NORMAL"Tu pokemon \t\t\t Pokemon del rival \n");
@@ -395,7 +402,7 @@ void mostrar_combate_pokemon(pokemon_t* pokemon_jugador, pokemon_t* pokemon_entr
 }
 
 
-
+//Muestra por pantalla todos los pokemones que esten en el equipo dado en sucesion.
 void mostrar_equipo(lista_t* equipo){
     lista_iterador_t* iterador_equipo = lista_iterador_crear(equipo);
     while(lista_iterador_tiene_siguiente(iterador_equipo)){
@@ -406,6 +413,7 @@ void mostrar_equipo(lista_t* equipo){
     lista_iterador_destruir(iterador_equipo);
 }
 
+//Muestra por pantalla toda la informacion del personaje controlado por el usuario.
 void mostrar_jugador(personaje_t* jugador){
     printf(NORMAL"Nombre del jugador: %s\n", jugador->nombre);
     printf("Ciudad de origen: %s\n", jugador->ciudad_natal);
@@ -416,14 +424,14 @@ void mostrar_jugador(personaje_t* jugador){
     mostrar_equipo(jugador->capturados);
 }
 
-
+//Muestra por pantalla toda la informacion del entrenador.
 void imprimir_entrenador(entrenador_t* entrenador){
     printf(NORMAL"%s\n", entrenador->nombre);
     mostrar_equipo(entrenador->equipo);
 }
 
 
-
+//Muestra por pantalla la informacion de todos los entrenadores que se encuentran en la lista en sucesion..
 void imprimir_entrenadores(lista_t* entrenadores){
     lista_iterador_t* iterador_entrenadores = lista_iterador_crear(entrenadores);
     while(lista_iterador_tiene_siguiente(iterador_entrenadores)){
@@ -435,7 +443,7 @@ void imprimir_entrenadores(lista_t* entrenadores){
     lista_iterador_destruir(iterador_entrenadores);
 }
 
-
+//Muestra por pantalla la informacion del gimnasio dado.
 void mostrar_gimnasio(gimnasio_t* gimnasio){
     printf(AMARILLO"\n%s\n", gimnasio->nombre);
     printf("Dificultad del Gimnasio: %u\n", gimnasio->dificultad);
@@ -444,9 +452,11 @@ void mostrar_gimnasio(gimnasio_t* gimnasio){
     imprimir_entrenadores(gimnasio->entrenadores);
 }
 
-
+//Muestra por pantalla la informacion de todos los gimnasios cargados en el HEAP en sucesion.
 void mostrar_gimnasios(heap_t* gimnasios){
     if(!gimnasios){
+            printf(ROJO"No hay un HEAP!!!!\n");
+            printf(NORMAL"");
         return;
     }
 
@@ -457,11 +467,12 @@ void mostrar_gimnasios(heap_t* gimnasios){
         printf("\n\n\n");
         gimnasio = heap_extraer_minimal(gimnasios);
     }
-    printf("Ya no hay más gimnasios para mostrar\n");
+    printf(NORMAL"Ya no hay más gimnasios para mostrar\n");
 }
 
 
-
+//Muestra por pantalla las opciones que tiene disponible el usuario en el menu victoria.
+//En caso de ya haber usado la opcion de tomar uno de los pokemones del lider vencido, esta opcion ya no se mostrará.
 void mostrar_opciones_menu_victoria(bool ya_robo){
     printf(NORMAL"Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
     if(!ya_robo){
@@ -471,6 +482,9 @@ void mostrar_opciones_menu_victoria(bool ya_robo){
     printf(" %c --> Siguiente gimnaio\n", PROXIMO);
 }
 
+//Pide al usuario que ingrerse uno de los comandos que tiene disponible en el menu victoria.
+//En caso de ya haber usado la opcion de tomar uno de los pokemones del lider vencido, este comando ya no será valido para el mismo lider.
+//En caso de ingresar un comando no valido se aclara que el comando ingresado no es valido y se vulve a pedir otro.
 char pedir_instruccion_victoria(bool ya_robo){
     printf(NORMAL"Ingrese uno de los comandos de arriva...\n");
     char letra = (char)getchar();
@@ -485,7 +499,9 @@ char pedir_instruccion_victoria(bool ya_robo){
     return letra;
 }
 
-
+//Pide al usuario que ingrerse la posicion del pokemon que desea seleccionar.
+//Se supone que se usa en conjunto con alguna funcion que muestra una lista de pokemones.
+//En caso de ingresar un posicion invalida se aclara que la posicion ingresada no es valida y se vulve a pedir otra.
 int pedir_posicion_pokemon(size_t tope_equipo){
     int posicion;
     scanf("%i", &posicion);
@@ -497,6 +513,7 @@ int pedir_posicion_pokemon(size_t tope_equipo){
     return posicion;
 }
 
+//Devuelve el pokemon que este en la posicion dada en la lista recibida.
 pokemon_t* obtener_pokemon_en_posicion(lista_t* equipo, int posicion){
     if(posicion<0){
         printf("No se seleccionó ningun pokemon\n");
@@ -505,7 +522,9 @@ pokemon_t* obtener_pokemon_en_posicion(lista_t* equipo, int posicion){
     return lista_elemento_en_posicion(equipo, (size_t)posicion);
 }
 
-
+//Pide al usuario que confirme alguna opción/comando elegido con anterioridad.
+//En caso de ingresar una respuesta no valido se aclara que no es valida y se vulve a pedir otra.
+//SE devuelve true si el usuario confirma su eleccion o false si se arrepiente.
 bool pedir_confirmacion(){
     printf("Es esto correcto? Y/N: ");
     char respuesta;
@@ -524,6 +543,9 @@ bool pedir_confirmacion(){
 }
 
 
+//Pregunta al usuario si quiere seguir cargando archivos de gimnasio.
+//En caso de ingresar una respuesta no valido se aclara que no es valida y se vulve a pedir otra.
+//Se devuelve true si el usuario quiere seguir cargando o false si no.
 bool quiere_seguir_cargando(){
     char respuesta;
     printf("Quiere cargar otro gimnasio??\n Y/N : ");
@@ -536,7 +558,7 @@ bool quiere_seguir_cargando(){
     return quiere_seguir_cargando();
 }
 
-
+//Muestra por pantalla las opciones que tiene disponible el usuario en el menu derrota.
 void mostrar_opciones_menu_derrota(){
     printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
     printf(" %c --> Cambiar los pokemones en tu equipo con aquellos que hayas capturado\n", CAMBIAR_EQUIPO);
@@ -544,6 +566,8 @@ void mostrar_opciones_menu_derrota(){
     printf(" %c --> REndirse\n", RENDIRSE);
 }
 
+//Pide al usuario que ingrerse uno de los comandos que tiene disponible en el menu derrota.
+//En caso de ingresar un comando no valido se aclara que el comando ingresado no es valido y se vulve a pedir otro.
 char pedir_instruccion_derrota(){
     printf("Ingrese uno de los comandos de arriva...\n");
     char letra;
@@ -557,7 +581,7 @@ char pedir_instruccion_derrota(){
 }
 
 
-
+//Muestra por pantalla las opciones que tiene disponible el usuario en el menu inicial.
 void mostrar_opciones_menu_inicial(){
     printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
     printf(" %c --> Ingreasar archivo del personaje principal\n", INGRESAR_JUGADOR);
@@ -566,6 +590,8 @@ void mostrar_opciones_menu_inicial(){
     printf(" %c --> simular una partida con los datos cargados\n", SIMULAR);
 }
 
+//Pide al usuario que ingrerse uno de los comandos que tiene disponible en el menu inicial.
+//En caso de ingresar un comando no valido se aclara que el comando ingresado no es valido y se vulve a pedir otro.
 char pedir_instruccion_inicial(){
     printf("Ingrese uno de los comandos de arriva...\n");
     char letra;
@@ -579,7 +605,7 @@ char pedir_instruccion_inicial(){
 }
 
 
-
+//Muestra por pantalla las opciones que tiene disponible el usuario en el menu gimnasio.
 void mostrar_opciones_menu_gimnasio(){
     printf("Seleccione una de las siguientes opciones a continuacion y recuerde solo ingresar la letra correspondiente en mayuscula:\n");
     printf(" %c --> Mostrar al entrenador actual con su equipo\n", MOSTRAR_JUGADOR);
@@ -588,6 +614,8 @@ void mostrar_opciones_menu_gimnasio(){
     printf(" %c --> Avanzar al siguiente combate\n", BATALLA);
 }
 
+//Pide al usuario que ingrerse uno de los comandos que tiene disponible en el menu gimnasio.
+//En caso de ingresar un comando no valido se aclara que el comando ingresado no es valido y se vulve a pedir otro.
 char pedir_instruccion_gimnasio(){
     printf("Ingrese uno de los comandos de arriva...\n");
     char letra;
