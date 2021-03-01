@@ -58,7 +58,7 @@ void imp_err_extraer_pkmn();
 //Mensaje de error al fallar el traslado del pokemon en el equipo a capturados.
 void imp_err_trasladar_pkmn();
 //Mensaje de error al fallar la insercion del pokemon porque el equipo del entrenador estaba lleno.
-void imp_err_equipo_lleno();
+void imp_err_equipo_lleno(char* nombre_pkm, char* nombre_entrenador);
 
 
 
@@ -127,6 +127,8 @@ void imp_msj_ingresar_posicion();
 void imp_msj_pkm_seleccionado();
 //Mensaje de transferencia realizada con exito.
 void imp_msj_transferencia_exitosa();
+//Mensaje de archivo cargado con exito.
+void imp_msj_carga_exitosa();
 //Mensaje de introduccion a la carga del personaje
 void imp_msj_intro_carga_personaje();
 //Mensaje de introduccion a la carga del gimnasio

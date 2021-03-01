@@ -21,7 +21,7 @@ funcion_batalla determinar_funcion(size_t n){
 
 
 //Lee la primera letra de una linea de un archivo de texto y la almacena en la varaibel pasada por referencia.
-bool leer_primera_letra_de_linea(FILE* archivo, char* letra){
+bool leer_primera_letra_de_linea_gimnasio(FILE* archivo, char* letra){
     if(!archivo || !letra)
         return false;
    int leidos = fscanf(archivo, FORMATO_LECTURA_PRIMERA_LETRA, letra);
@@ -109,7 +109,7 @@ bool agregar_nuevo_pokemon_entrenador(entrenador_t* entrenador, pokemon_t* pokem
     }
 
     if(lista_elementos(entrenador->equipo)>=MAX_EQUIPO){
-    	imp_err_equipo_lleno();
+    	imp_err_equipo_lleno(pokemon->nombre, entrenador->nombre);
         free(pokemon);
         return true;
     }
@@ -182,7 +182,7 @@ gimnasio_t* leer_archivo_gimnasio(FILE* archivo_gimnasio){
     char tipo_linea = GIMNASIO; //La primera linea siempre deberia ser la del gimnasio
     
 
-    todo_ok = leer_primera_letra_de_linea(archivo_gimnasio, &tipo_linea);
+    todo_ok = leer_primera_letra_de_linea_gimnasio(archivo_gimnasio, &tipo_linea);
     
     while(todo_ok){
         if(tipo_linea == GIMNASIO){
@@ -196,7 +196,7 @@ gimnasio_t* leer_archivo_gimnasio(FILE* archivo_gimnasio){
         }
 
         if(todo_ok){
-            todo_ok = leer_primera_letra_de_linea(archivo_gimnasio, &tipo_linea);
+            todo_ok = leer_primera_letra_de_linea_gimnasio(archivo_gimnasio, &tipo_linea);
         }
     }
 
@@ -235,8 +235,7 @@ void cargar_gimnasio(heap_t* heap, char* direccion_gimasio){
 
     FILE* archivo_gimnasio = fopen(direccion_gimasio, "r");
     if(!archivo_gimnasio){
-        imp_err_abrir_archivo();
-        return;
+        return imp_err_abrir_archivo();
     }
 
     gimnasio_t* nuevo_gimnasio = leer_archivo_gimnasio(archivo_gimnasio);
@@ -248,11 +247,10 @@ void cargar_gimnasio(heap_t* heap, char* direccion_gimasio){
 
     if(heap_insertar(heap, nuevo_gimnasio)==ERROR){
         destructor_gimnasios(nuevo_gimnasio);
-        imp_err_insertar_gimnasio();
-        return;
+        return imp_err_insertar_gimnasio();
     }
     
-    return;
+    return imp_msj_carga_exitosa();
 }
 
 

@@ -4,7 +4,7 @@
 
 
 //Lee la primera letra de una linea de un archivo de texto y la almacena en la varaibel pasada por referencia.
-bool leer_primera_letra_de_linea(FILE* archivo, char* letra){
+bool leer_primera_letra_de_linea_personaje(FILE* archivo, char* letra){
     if(!archivo || !letra)
         return false;
    int leidos = fscanf(archivo, FORMATO_LECTURA_PRIMERA_LETRA, letra);
@@ -120,7 +120,7 @@ personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
     bool todo_ok = true;
     char tipo_linea = ENTRENADOR; //La primera linea del archivo de personaje debería ser la que tiene los datos del personaje en si, siempre. 
 
-    todo_ok = leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
+    todo_ok = leer_primera_letra_de_linea_personaje(archivo_personaje, &tipo_linea);
 
     while(todo_ok){
         if(tipo_linea == ENTRENADOR){
@@ -132,7 +132,7 @@ personaje_t* leer_archivo_personaje(FILE* archivo_personaje){
         }
 
         if(todo_ok){
-            todo_ok = leer_primera_letra_de_linea(archivo_personaje, &tipo_linea);
+            todo_ok = leer_primera_letra_de_linea_personaje(archivo_personaje, &tipo_linea);
         }
     }
 
@@ -151,8 +151,7 @@ void cargar_personaje(personaje_t** jugador){
 
     FILE* archivo_personaje = fopen(direccion_personaje, "r");
     if(!archivo_personaje){
-        imp_err_abrir_archivo();
-        return;
+        return imp_err_abrir_archivo();
     }
 
     if(*jugador){
@@ -162,5 +161,5 @@ void cargar_personaje(personaje_t** jugador){
     (*jugador) = leer_archivo_personaje(archivo_personaje);
 
     fclose(archivo_personaje);
-    return;
+    return imp_msj_carga_exitosa();
 }

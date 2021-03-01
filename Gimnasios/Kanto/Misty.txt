@@ -3,7 +3,7 @@ L;Misty
 P;Staryu;Agua;50;40;50
 P;Starmie;Agua;90;50;60
 E;Dominguera Diana
-P;Goldeen;Agua;40;50;30
+P;Goldeen;avena;40;50;30
 E;Nadador Luis
 P;Horsea;Agua;45;30;20
 P;Shellder;Agua;30;20;45

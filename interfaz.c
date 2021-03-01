@@ -158,8 +158,8 @@ void imp_err_trasladar_pkmn(){
 }
 
 //Mensaje de error al fallar la insercion del pokemon porque el equipo del entrenador estaba lleno.
-void imp_err_equipo_lleno(){
-    printf(ROJO"No se le pueden colocar mas pokemones a este entrenador, su equipo esta lleno!!!\n Se intentará seguir con la carga saltando este pokemon\n");
+void imp_err_equipo_lleno(char* nombre_pkm, char* nombre_entrenador){
+    printf(AMARILLO"No se le pueden colocar mas pokemones al entrenador %s, su equipo esta lleno!!!\n Se intentará seguir con la carga saltando el pokemon %s\n", nombre_entrenador, nombre_pkm);
     printf(NORMAL"");
 }
 
@@ -343,6 +343,13 @@ void imp_msj_transferencia_exitosa(){
     printf(VERDE"Transfrencia realizada con exito!!\n");
     printf(NORMAL"");
 }
+
+//Mensaje de archivo cargado con exito.
+void imp_msj_carga_exitosa(){
+	printf(VERDE"Archivo cargado con exito!!\n");
+    printf(NORMAL"");
+}
+
 
 //Mensaje de introduccion a la carga del personaje
 void imp_msj_intro_carga_personaje(){

@@ -78,13 +78,13 @@ bool es_pkm_valido(pokemon_t* pokemon){
 		return false;
 	}
 
-	if(strcmp(pokemon->tipo, AGUA)){
+	if(strcmp(pokemon->tipo, AGUA)==0){
 		return true;
-	}else if(strcmp(pokemon->tipo, TIERRA)){
+	}else if(strcmp(pokemon->tipo, TIERRA)==0){
 		return true;
-	}else if(strcmp(pokemon->tipo, FUEGO)){
+	}else if(strcmp(pokemon->tipo, FUEGO)==0){
 		return true;
-	}else if(strcmp(pokemon->tipo, AIRE)){
+	}else if(strcmp(pokemon->tipo, AIRE)==0){
 		return true;
 	}else{
 		return false;

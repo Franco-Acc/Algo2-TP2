@@ -27,7 +27,7 @@
 			-)  Equipos de pokemon : Se utilizó una lista ya que se necesitaba tener acceso a todos los elementos del mismo. Para esto se utilizó en conjunto un Iterador Externo de lista 
 				para poder ir recorriendo todos los elementos de manera controlada.
 
-				Cabe destacar que en la gran mayoria del tiempo las listas de equipos pokemon se utilizan como colas, puesto que el enfrentamiento entre entrenadores siempre tiene el mismo orden, desde el primer pokemon de la lista hasta el ultimo.
+				Cabe destacar que en la gran mayoria del tiempo las listas de equipos pokemon se utilizan como colas, puesto que la carga de los pokemones en el equipo se da en el mismo orden en el que están en el archivo, desde el primer pokemon de la lista hasta el ultimo.
 
 				Sin embargo no se optó por usar una cola "pura" ya que era necesario tener acceso a todos los items almacenados y no solamente al primero y al ultimo.
 				Por ejemplo cuando se enfrentan dos entrenadores y uno de sus pokemones gana una pelea el que perdio debe enviar a su siguiente pokemon en la lista. Esto en una cola en la que solo se tiene acceso al primer y ultimo pokemon implicaría el uso de otra cola auxiliar para ir guaradando los pokemones derrotados de ambos bandos y al terminar la pelea devolverlos a todos a sus listas originales en el mismo orden.
