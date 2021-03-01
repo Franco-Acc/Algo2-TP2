@@ -5,7 +5,7 @@ P;Pidgeotto;Aire;65;40;30
 P;Bulbasaur;Tierra;20;40;30
 P;Charmander;Fuego;40;30;20
 P;Squirtle;Agua;30;20;40
-P;Krabby;avena;20;30;20
+P;Krabby;Agua;20;30;20
 P;Raticate;Tierra;150;50;20
 P;Haunter;Tierra;40;60;20
 P;Primeape;Agua;50;60;30

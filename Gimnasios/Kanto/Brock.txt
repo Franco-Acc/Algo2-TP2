@@ -7,9 +7,3 @@ P;Omastar;Tierra;30;207;227
 E;Minero José
 P;Rhyhorn;Tierra;50;140;127
 P;Kabutops;Tierra;50;203;120
-P;Kabutops;Tierra;50;203;120
-P;Kabutops;Tierra;50;203;120
-P;Kabutops;Tierra;50;203;120
-P;Kabutops;Tierra;50;203;120
-P;Kabutops;Tierra;50;203;120
-P;Kabutops;Tierra;50;203;120
