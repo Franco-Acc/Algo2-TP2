@@ -50,30 +50,6 @@ void jugar(personaje_t* jugador, heap_t* gimnasios, bool es_simulacion){
     	imp_msj_finalizacion_por_victoria(jugador->medallas_ganadas);
 }
 
-/*
-void simular(personaje_t* jugador, heap_t* gimnasios){
-	if(!jugador || !gimnasios)
-		return;
-
-    int resultado = VICTORIA;
-    gimnasio_t* gimnasio_actual = heap_extraer_minimal(gimnasios);
-
-    while(gimnasio_actual && resultado==VICTORIA){
-        resultado = enfrentar_gimnasio(jugador, gimnasio_actual, true);
-        if(resultado==VICTORIA){
-            aniadir_medalla(jugador);
-            destructor_gimnasios((void*)gimnasio_actual);
-            gimnasio_actual = heap_extraer_minimal(gimnasios);
-        }else if(resultado==DERROTA){
-            printf(AMARILLO"Has sucumbido a la dificultad del gimnasio %s, mejor suerte la proxima\n", gimnasio_actual->nombre);
-            destructor_gimnasios((void*)gimnasio_actual);
-        }else{
-            printf(ROJO"Falta el jugador y/o gimnasio\n");
-            destructor_gimnasios((void*)gimnasio_actual);
-        }
-    }
-}
-*/
 
 //Reserva la memoria necesaria para el heap de gimnasios e inicializa el personaje jugable en NULL.
 int crear_estructuras(heap_t** gimnasios, personaje_t** jugador){

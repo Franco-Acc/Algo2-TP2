@@ -21,13 +21,13 @@
 #define MAX_BONUS 63
 
 #define OK 0
-#define ERROR -1
+#define ERROR -9
 
 #define VICTORIA 1
 #define DERROTA 2
 
 #define GANO_PRIMERO 1
-#define GANO_SEGUNDO 2
+#define GANO_SEGUNDO -1
 
 #define SI 'Y'
 #define NO 'N'

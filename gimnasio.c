@@ -203,29 +203,6 @@ gimnasio_t* leer_archivo_gimnasio(FILE* archivo_gimnasio){
     return un_gimnasio;
 }
 
-/*
-void liberar_gimnasio(gimnasio_t* gimnasio){
-    if(!gimnasio)
-        return;
-    if(gimnasio->entrenadores){
-        while(!lista_vacia(gimnasio->entrenadores)){
-            entrenador_t* un_entrenador = lista_tope(gimnasio->entrenadores);
-            if(un_entrenador->equipo){
-                while(!lista_vacia(un_entrenador->equipo)){
-                    free(lista_primero(un_entrenador->equipo));
-                    lista_desencolar(un_entrenador->equipo);
-                }
-                lista_destruir(un_entrenador->equipo);
-            }
-            free(un_entrenador);
-            lista_desapilar(gimnasio->entrenadores);
-        }
-        lista_destruir(gimnasio->entrenadores);
-    }
-    free(gimnasio);
-}
-*/
-
 
 //Carga la informacion del archivo gimnasio pasado a un gimnasio en el heap y lo inserta en el heap pasado.
 //En caso de Error en la lectura del archivo se insertará en el heap gimnasio con la informacion cargada hasta donde se haya podido leer.
